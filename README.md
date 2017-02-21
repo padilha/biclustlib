@@ -9,12 +9,13 @@ biclustlib is a Python library of biclustering algorithms and evaluation measure
 ## Example of use
 
 ## Citation
-If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was originally proposed:
+If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was originally proposed.
 
-Padilha, V. A. & Campello, R. J. G. B. (2017). A systematic comparative evaluation of biclustering techniques. *BMC Bioinformatics*, 18(1):55.
+To cite biclustlib use: Padilha, V. A. & Campello, R. J. G. B. (2017). A systematic comparative evaluation of biclustering techniques. *BMC Bioinformatics*, 18(1):55.
 
 For TeX/LaTeX:
-    @article{padilha2017systematic,
+
+    @article{padilha2017,
       title={A systematic comparative evaluation of biclustering techniques},
       author={Padilha, Victor A and Campello, Ricardo J G B},
       journal={BMC Bioinformatics},

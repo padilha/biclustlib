@@ -20,6 +20,7 @@
 
 from bcca import BiCorrelationClusteringAlgorithm
 from bibit import BitPatternBiclusteringAlgorithm
+from cca import ChengChurchAlgorithm
 from las import LargeAverageSubmatrices
 from spectral import Spectral
 from xmotifs import ConservedGeneExpressionMotifs

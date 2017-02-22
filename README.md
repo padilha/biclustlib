@@ -4,9 +4,15 @@ biclustlib is a Python library of biclustering algorithms and evaluation measure
 
 ## Installation
 
+TODO
+
 ### Dependencies
 
+See requirements.txt.
+
 ## Example of use
+
+TODO
 
 ## Citation
 If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was originally proposed.

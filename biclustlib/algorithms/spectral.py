@@ -20,7 +20,7 @@
 
 from ._base import BaseBiclusteringAlgorithm
 from sklearn.cluster.bicluster import SpectralBiclustering
-from ..model import Bicluster, Biclustering
+from ..models import Bicluster, Biclustering
 
 class Spectral(BaseBiclusteringAlgorithm):
     """Spectral Biclustering. This class is a simple wrapper of Spectral's implementation available in

@@ -12,7 +12,20 @@ See requirements.txt.
 
 ## Example of use
 
-TODO
+```python
+import numpy as np
+
+from biclustlib.algorithms import LargeAverageSubmatrices
+
+data = np.random.normal(loc=0.0, scale=1.0, size=(200, 200))
+data[:20, :20] = 5.0 # The LAS algorithm searches for biclusters containing large average values when compared to the full data matrix.
+
+las = LargeAverageSubmatrices(num_biclusters=1)
+biclustering = las.run(data)
+bicluster = biclustering.biclusters.pop()
+bicluster.sort()
+print(bicluster)
+```
 
 ## Citation
 If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was originally proposed.

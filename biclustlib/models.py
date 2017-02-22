@@ -47,6 +47,11 @@ class Bicluster:
         """Calculates the number of matrix elements of the bicluster."""
         return len(self.rows) * len(self.cols)
 
+    def sort(self):
+        """Sorts the array of rows and the array of column indices of the bicluster."""
+        self.rows.sort()
+        self.cols.sort()
+
     def __str__(self):
         return 'Bicluster(rows={0}, cols={1})'.format(self.rows, self.cols)
 

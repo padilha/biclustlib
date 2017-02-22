@@ -19,7 +19,7 @@
 """
 
 from ._base import BaseBiclusteringAlgorithm
-from ..model import Bicluster, Biclustering
+from ..models import Bicluster, Biclustering
 from itertools import combinations
 from gmpy import popcount
 

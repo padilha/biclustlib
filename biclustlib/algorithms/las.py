@@ -19,7 +19,7 @@
 """
 
 from ._base import BaseBiclusteringAlgorithm
-from ..model import Bicluster, Biclustering
+from ..models import Bicluster, Biclustering
 from sklearn.preprocessing import scale
 from scipy.stats import norm
 from operator import itemgetter
@@ -110,10 +110,10 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
             old_avg = avg
 
             row_sums = np.sum(data[:, cols], axis=1)
-            rows = bn.argpartsort(row_sums, num_rows - k)[-k:] # this is usually faster than rows = np.argsort(row_sums)[-k:]
+            rows = bn.argpartition(row_sums, num_rows - k)[-k:] # this is usually faster than rows = np.argsort(row_sums)[-k:]
 
             col_sums = np.sum(data[rows, :], axis=0)
-            cols = bn.argpartsort(col_sums, num_cols - l)[-l:] # this is usually faster than cols = np.argsort(col_sums)[-l:]
+            cols = bn.argpartition(col_sums, num_cols - l)[-l:] # this is usually faster than cols = np.argsort(col_sums)[-l:]
 
             avg = np.mean(data[np.ix_(rows, cols)])
 

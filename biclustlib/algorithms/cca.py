@@ -121,7 +121,15 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
         the original paper)"""
         msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
 
-        while msr > self.msr_threshold:
+        if msr > self.msr_threshold:
+            stop = True
+        else:
+            stop = False
+
+        while not stop:
+            cols_old = np.copy(cols)
+            rows_old = np.copy(rows)
+
             row_indices = np.where(rows)[0]
             rows2remove = row_indices[np.where(row_msr > self.multiple_node_deletion_threshold * msr)]
             rows[rows2remove] = False
@@ -133,31 +141,35 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
             else:
                 cols2remove = np.array([])
 
-            # Tests if no rows and no columns were removed during this iteration.
-            # If true the loop must stop, otherwise it will become an infinite loop.
-            if len(rows2remove) == 0 and len(cols2remove) == 0:
-                break
-
             msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
+
+            # Tests if the new MSR value is smaller than the acceptable MSR threshold.
+            # Tests if no rows and no columns were removed during this iteration.
+            # If one of the conditions is true the loop must stop, otherwise it will become an infinite loop.
+            if msr <= self.msr_threshold or (np.all(rows == rows_old) and np.all(cols == cols_old)):
+                stop = True
 
     def _node_addition(self, data, rows, cols):
         """Performs the row/column addition step (this is a direct implementation of the Algorithm 3 described in
         the original paper)"""
-        added_cols, added_rows = True, True
+        stop = False
 
-        while added_cols or added_rows:
+        while not stop:
+            cols_old = np.copy(cols)
+            rows_old = np.copy(rows)
+
             msr, _, _ = self._calculate_msr(data, rows, cols)
-
             col_msr = self._calculate_msr_col_addition(data, rows, cols)
             cols2add = np.where(col_msr <= msr)[0]
             cols[cols2add] = True
-            added_cols = len(cols2add) > 0
 
             msr, _, _ = self._calculate_msr(data, rows, cols)
             row_msr, row_inverse_msr = self._calculate_msr_row_addition(data, rows, cols)
             rows2add = np.where(np.logical_or(row_msr <= msr, row_inverse_msr <= msr))[0]
             rows[rows2add] = True
-            added_rows = len(rows2add) > 0
+
+            if np.all(rows == rows_old) and np.all(cols == cols_old):
+                stop = True
 
     def _calculate_msr(self, data, rows, cols):
         """Calculate the mean squared residues of the rows, of the columns and of the full data matrix."""

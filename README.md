@@ -15,16 +15,20 @@ See requirements.txt.
 ```python
 import numpy as np
 
-from biclustlib.algorithms import LargeAverageSubmatrices
+from biclustlib.algorithms import ChengChurchAlgorithm
+from biclustlib.datasets import load_yeast_tavazoie
 
-data = np.random.normal(loc=0.0, scale=1.0, size=(200, 200))
-data[:20, :20] = 5.0 # The LAS algorithm searches for biclusters containing large average values when compared to the full data matrix.
+# load yeast data used in the original Cheng and Church's paper
+data = load_yeast_tavazoie().values
 
-las = LargeAverageSubmatrices(num_biclusters=1)
-biclustering = las.run(data)
-bicluster = biclustering.biclusters.pop()
-bicluster.sort()
-print(bicluster)
+# missing value imputation suggested by Cheng and Church
+missing = np.where(data < 0.0)
+data[missing] = np.random.randint(low=0, high=800, size=len(missing[0]))
+
+# creating an instance of the ChengChurchAlgorithm class and running with the parameters of the original study
+cca = ChengChurchAlgorithm(num_biclusters=100, msr_threshold=300.0, multiple_node_deletion_threshold=1.2)
+biclustering = cca.run(data)
+print(biclustering)
 ```
 
 ## Citation

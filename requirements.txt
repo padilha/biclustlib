@@ -1,6 +1,7 @@
 numpy
 scipy
 sklearn
+pandas
 bottleneck
 munkres
 gmpy

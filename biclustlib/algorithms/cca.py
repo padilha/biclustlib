@@ -121,7 +121,7 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
         the original paper)"""
         msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
 
-        if msr > self.msr_threshold:
+        if msr <= self.msr_threshold:
             stop = True
         else:
             stop = False

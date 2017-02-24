@@ -77,11 +77,4 @@ def load_cancer_benchmark():
 
 def _load_benchmark(path, read_func, split_func):
     files = listdir(path)
-    benchmark = {}
-
-    for f in files:
-        dataframe = read_func(join(path, f))
-        name = split_func(f)
-        benchmark[name] = dataframe
-
-    return benchmark
+    return {split_func(f) : read_func(join(path, f)) for f in files}

@@ -26,7 +26,8 @@ import pandas as pd
 
 def load_yeast_tavazoie():
     """Load and return the yeast dataset used in the original biclustering study of Cheng and Church (2000)
-    as a pandas.DataFrame. This dataset is freely available in http://arep.med.harvard.edu/biclustering/.
+    as a pandas.DataFrame. All elements equal to -1 are missing values. This dataset is freely available
+    in http://arep.med.harvard.edu/biclustering/.
 
     Reference
     ---------

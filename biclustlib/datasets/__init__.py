@@ -20,3 +20,4 @@
 
 from load import load_yeast_tavazoie
 from load import load_yeast_benchmark
+from load import load_cancer_benchmark

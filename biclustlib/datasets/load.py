@@ -54,12 +54,34 @@ def load_yeast_benchmark():
     """
     module_dir = dirname(__file__)
     benchmark_dir_path = join(module_dir, 'data', 'yeast_benchmark')
-    files = listdir(benchmark_dir_path)
+
+    return _load_benchmark(benchmark_dir_path,
+                           read_func=lambda f : pd.read_csv(f, delim_whitespace=True, index_col=[0, 1]),
+                           split_func=lambda f : f.split('.')[0])
+
+def load_cancer_benchmark():
+    """Load and return a dictionary containing the collection of 35 cancer datasets proposed as a benchmark by
+    de Souto et al. (2008). Each dictionary key is the dataset name. Each dictionary value is a pandas.DataFrame.
+
+    Reference
+    ---------
+    de Souto, M. C., Costa, I. G., de Araujo, D. S., Ludermir, T. B., & Schliep, A. (2008). Clustering cancer gene
+    expression data: a comparative study. BMC bioinformatics, 9(1), 497.
+    """
+    module_dir = dirname(__file__)
+    benchmark_dir_path = join(module_dir, 'data', 'cancer_benchmark')
+
+    return _load_benchmark(benchmark_dir_path,
+                           read_func=lambda f : pd.read_table(f, header=0, index_col=0),
+                           split_func=lambda f : f.split('_')[0])
+
+def _load_benchmark(path, read_func, split_func):
+    files = listdir(path)
     benchmark = {}
 
     for f in files:
-        dataframe = pd.read_csv(join(benchmark_dir_path, f), delim_whitespace=True, index_col=[0, 1])
-        name = f.split('.').pop(0)
+        dataframe = read_func(join(path, f))
+        name = split_func(f)
         benchmark[name] = dataframe
 
     return benchmark

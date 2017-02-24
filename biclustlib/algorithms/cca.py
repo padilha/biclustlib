@@ -40,14 +40,15 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
         Number of biclusters to be found.
 
     msr_threshold : float, default: 0.1
-        Maximum mean squared residue accepted.
+        Maximum mean squared residue accepted (delta parameter in the original paper).
 
     multiple_node_deletion_threshold : float, default: 1.2
-        Scaling factor to remove multiple rows or columns.
+        Scaling factor to remove multiple rows or columns (alpha parameter in the original paper).
 
     data_min_cols : int, default: 100
         Minimum number of dataset columns required to perform multiple column deletion.
     """
+
     def __init__(self, num_biclusters=10, msr_threshold=0.1, multiple_node_deletion_threshold=1.2, data_min_cols=100):
         self.num_biclusters = num_biclusters
         self.msr_threshold = msr_threshold
@@ -82,103 +83,128 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
             row_indices = np.where(rows)[0]
             col_indices = np.where(cols)[0]
 
+            if len(row_indices) == 0 or len(col_indices) == 0:
+                break
+
             # masking matrix values
             if i < self.num_biclusters - 1:
                 bicluster_shape = (len(row_indices), len(col_indices))
-                data[rows[:, np.newaxis], cols] = np.random.uniform(low=min_value, high=max_value, shape=bicluster_shape)
+                data[row_indices[:, np.newaxis], col_indices] = np.random.uniform(low=min_value, high=max_value, size=bicluster_shape)
 
             biclusters.append(Bicluster(row_indices, col_indices))
 
         return Biclustering(biclusters)
 
     def _single_node_deletion(self, data, rows, cols):
-        """Performs the single row/column deletion step (this is a direct implementation
-        of Algorithm 1 described in the original paper)"""
-        squared_residues = self._calculate_squared_residues(data[rows][:, cols])
-        msr = np.mean(squared_residues)
+        """Performs the single row/column deletion step (this is a direct implementation of the Algorithm 1 described in
+        the original paper)"""
+        msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
 
         while msr > self.msr_threshold:
             row_indices = np.where(rows)[0]
             col_indices = np.where(cols)[0]
 
-            row_msr = np.mean(squared_residues, axis=1)
-            col_msr = np.mean(squared_residues, axis=0)
+            row_max_msr = np.argmax(row_msr)
+            col_max_msr = np.argmax(col_msr)
 
-            row2remove = np.argmax(row_msr)
-            col2remove = np.argmax(col_msr)
-
-            if row_msr[row2remove] >= col_msr[col2remove]:
-                rows[row_indices[row2remove]] = False
+            if row_msr[row_max_msr] >= col_msr[col_max_msr]:
+                row2remove = row_indices[row_max_msr]
+                rows[row2remove] = False
             else:
-                cols[col_indices[col2remove]] = False
+                col2remove = col_indices[col_max_msr]
+                cols[col2remove] = False
 
-            squared_residues = self._calculate_squared_residues(data[rows][:, cols])
-            msr = np.mean(squared_residues)
+            msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
 
     def _multiple_node_deletion(self, data, rows, cols):
-        """Performs the multiple row/column deletion step (this is a direct implementation
-        of Algorithm 2 described in the original paper)"""
-        squared_residues = self._calculate_squared_residues(data)
-        msr = np.mean(squared_residues)
+        """Performs the multiple row/column deletion step (this is a direct implementation of the Algorithm 2 described in
+        the original paper)"""
+        msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
 
         while msr > self.msr_threshold:
             row_indices = np.where(rows)[0]
-            col_indices = np.where(cols)[0]
-
-            row_msr = np.mean(squared_residues, axis=1)
-            rows2remove = np.where(row_msr > self.multiple_node_deletion_threshold * msr)[0]
-            rows[row_indices[rows2remove]] = False
+            rows2remove = row_indices[np.where(row_msr > self.multiple_node_deletion_threshold * msr)]
+            rows[rows2remove] = False
 
             if len(cols) >= self.data_min_cols:
-                col_msr = np.mean(squared_residues, axis=0)
-                cols2remove = np.where(col_msr > self.multiple_node_deletion_threshold * msr)[0]
-                cols[col_indices[cols2remove]] = False
+                col_indices = np.where(cols)[0]
+                cols2remove = col_indices[np.where(col_msr > self.multiple_node_deletion_threshold * msr)]
+                cols[cols2remove] = False
             else:
                 cols2remove = np.array([])
 
+            # Tests if no rows and no columns were removed during this iteration.
+            # If true the loop must stop, otherwise it will become an infinite loop.
             if len(rows2remove) == 0 and len(cols2remove) == 0:
                 break
 
-            squared_residues = self._calculate_squared_residues(data[rows][:, cols])
-            msr = np.mean(squared_residues)
+            msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
 
     def _node_addition(self, data, rows, cols):
-        """Performs the row/column addition step (this is a direct implementation
-        of Algorithm 3 described in the original paper)"""
-        added_cols, added_rows, added_inverted_rows = True, True, True
+        """Performs the row/column addition step (this is a direct implementation of the Algorithm 3 described in
+        the original paper)"""
+        added_cols, added_rows = True, True
 
-        while added_cols or added_rows or added_inverted_rows:
-            added_cols = self._add_cols(data, rows, cols)
-            added_rows = self._add_rows(data, rows, cols)
-            added_inverted_rows = self._add_rows(-data, rows, cols)
+        while added_cols or added_rows:
+            msr, _, _ = self._calculate_msr(data, rows, cols)
 
-    def _add_rows(self, data, rows, cols):
-        """Selects the rows to be included in the bicluster."""
-        removed_rows = np.logical_not(rows)
-        removed_row_indices = np.where(removed_rows)[0]
-        removed_row_squared_residues = self._calculate_squared_residues(data[removed_rows][:, cols])
-        removed_row_msr = np.mean(removed_row_squared_residues, axis=1)
-        rows2add = np.where(removed_row_msr <= self.msr_threshold)[0]
-        rows[removed_row_indices[rows2add]] = True
-        return len(rows2add) > 0
+            col_msr = self._calculate_msr_col_addition(data, rows, cols)
+            cols2add = np.where(col_msr <= msr)[0]
+            cols[cols2add] = True
+            added_cols = len(cols2add) > 0
 
-    def _add_cols(self, data, rows, cols):
-        """Selects the columns to be included in the bicluster."""
-        removed_cols = np.logical_not(cols)
-        removed_col_indices = np.where(removed_cols)[0]
-        removed_col_squared_residues = self._calculate_squared_residues(data[rows][:, removed_cols])
-        removed_col_msr = np.mean(removed_col_squared_residues, axis=0)
-        cols2add = np.where(removed_col_msr <= self.msr_threshold)[0]
-        cols[removed_col_indices[cols2add]] = True
-        return len(cols2add) > 0
+            msr, _, _ = self._calculate_msr(data, rows, cols)
+            row_msr, row_inverse_msr = self._calculate_msr_row_addition(data, rows, cols)
+            rows2add = np.where(np.logical_or(row_msr <= msr, row_inverse_msr <= msr))[0]
+            rows[rows2add] = True
+            added_rows = len(rows2add) > 0
 
-    def _calculate_squared_residues(self, data):
-        """Calculate the elements' squared residues of a data matrix."""
-        data_mean = np.mean(data)
-        row_means = np.mean(data, axis=1)
-        col_means = np.mean(data, axis=0)
-        residues = data - row_means[:, np.newaxis] - col_means + data_mean
-        return residues * residues
+    def _calculate_msr(self, data, rows, cols):
+        """Calculate the mean squared residues of the rows, of the columns and of the full data matrix."""
+        sub_data = data[rows][:, cols]
+
+        data_mean = np.mean(sub_data)
+        row_means = np.mean(sub_data, axis=1)
+        col_means = np.mean(sub_data, axis=0)
+
+        residues = sub_data - row_means[:, np.newaxis] - col_means + data_mean
+        squared_residues = residues * residues
+
+        msr = np.mean(squared_residues)
+        row_msr = np.mean(squared_residues, axis=1)
+        col_msr = np.mean(squared_residues, axis=0)
+
+        return msr, row_msr, col_msr
+
+    def _calculate_msr_col_addition(self, data, rows, cols):
+        """Calculate the mean squared residues of the rows, of the inverse of the rows and of the columns for
+        the node addition step."""
+        data_mean = np.mean(data[rows][:, cols])
+        row_means = np.mean(data[:, cols], axis=1)
+        col_means = np.mean(data[rows], axis=0)
+
+        col_residues = data - row_means[:, np.newaxis] - col_means + data_mean
+        col_squared_residues = col_residues * col_residues
+        col_msr = np.mean(col_squared_residues, axis=0)
+
+        return col_msr
+
+    def _calculate_msr_row_addition(self, data, rows, cols):
+        """Calculate the mean squared residues of the rows, of the inverse of the rows and of the columns for
+        the node addition step."""
+        data_mean = np.mean(data[rows][:, cols])
+        row_means = np.mean(data[:, cols], axis=1)
+        col_means = np.mean(data[rows], axis=0)
+
+        row_residues = data - row_means[:, np.newaxis] - col_means + data_mean
+        row_squared_residues = row_residues * row_residues
+        row_msr = np.mean(row_squared_residues, axis=1)
+
+        inverse_residues = -data + row_means[:, np.newaxis] - col_means + data_mean
+        row_inverse_squared_residues = inverse_residues * inverse_residues
+        row_inverse_msr = np.mean(row_inverse_squared_residues, axis=1)
+
+        return row_msr, row_inverse_msr
 
     def _validate_parameters(self):
         if self.num_biclusters <= 0:

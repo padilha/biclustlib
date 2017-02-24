@@ -28,6 +28,6 @@ def load_yeast_tavazoie():
     as a pandas.DataFrame. This dataset is freely available in http://arep.med.harvard.edu/biclustering/.
     """
     module_dir = dirname(__file__)
-    data = np.loadtxt(join(module_dir, 'data', 'yeast_tavazoie.txt'), dtype=np.double)
-    genes = np.loadtxt(join(module_dir, 'data', 'genes_yeast_tavazoie.txt'), dtype=np.character)
+    data = np.loadtxt(join(module_dir, 'data', 'yeast_tavazoie', 'yeast_tavazoie.txt'), dtype=np.double)
+    genes = np.loadtxt(join(module_dir, 'data', 'yeast_tavazoie', 'genes_yeast_tavazoie.txt'), dtype=np.character)
     return pd.DataFrame(data, index=genes)

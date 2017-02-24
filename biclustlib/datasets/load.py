@@ -24,8 +24,8 @@ import numpy as np
 import pandas as pd
 
 def load_yeast_tavazoie():
-    """Load and return the yeast dataset used in Cheng and Church (2000) as a pandas.DataFrame.
-    This dataset is available in http://arep.med.harvard.edu/biclustering/
+    """Load and return the yeast dataset used in the original biclustering study of Cheng and Church (2000)
+    as a pandas.DataFrame. This dataset is freely available in http://arep.med.harvard.edu/biclustering/.
     """
     module_dir = dirname(__file__)
     data = np.loadtxt(join(module_dir, 'data', 'yeast_tavazoie.txt'), dtype=np.double)

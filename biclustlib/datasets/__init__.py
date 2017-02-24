@@ -19,3 +19,4 @@
 """
 
 from load import load_yeast_tavazoie
+from load import load_yeast_benchmark

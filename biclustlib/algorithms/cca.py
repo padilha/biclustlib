@@ -30,9 +30,7 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
 
     Reference
     ----------
-    Cheng, Y. and Church, G. M. (2000). Biclustering of expression data. In Proceedings of the 8th
-    International Conference on Intelligence Systems for Molecular Biology, volume 8, pages 93-103.
-    AAAI Press.
+    Cheng, Y., & Church, G. M. (2000). Biclustering of expression data. In Ismb (Vol. 8, No. 2000, pp. 93-103).
 
     Parameters
     ----------

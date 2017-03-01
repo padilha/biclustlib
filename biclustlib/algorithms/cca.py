@@ -225,3 +225,7 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
 
         if self.multiple_node_deletion_threshold < 1.0:
             raise ValueError("'multiple_node_deletion_threshold' must be greater than or equal to 1")
+
+    def _validate_data(self):
+        """CCA does not require any data validation step."""
+        pass

@@ -115,6 +115,7 @@ class ConservedGeneExpressionMotifs(BaseBiclusteringAlgorithm):
     def _validate_parameters(self):
         if self.num_biclusters <= 0 or self.num_seeds <= 0 or self.num_sets <= 0 or self.set_size <= 0:
             raise ValueError("'num_biclusters', 'num_seeds', 'num_sets' and 'set_size' must be greater than zero")
+
         if self.alpha < 0.0 or self.alpha > 1.0:
             raise ValueError("'alpha' must assume a value between 0.0 and 1.0")
 

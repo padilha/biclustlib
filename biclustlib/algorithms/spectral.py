@@ -77,3 +77,12 @@ class Spectral(BaseBiclusteringAlgorithm):
         num_biclusters = num_row_clusters * num_col_clusters
 
         return Biclustering([Bicluster(*self.sb.get_indices(i)) for i in range(num_biclusters)])
+
+    def _validate_parameters(self):
+        """This Spectral wrapper does not require any data parameters validation step. Refer to the _check_parameters method of the
+        class sklearn.cluster.bicluster.SpectralBiclustering."""
+        pass
+
+    def _validate_data(self):
+        """Spectral does not require any data validation step."""
+        pass

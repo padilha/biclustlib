@@ -138,5 +138,10 @@ class BiCorrelationClusteringAlgorithm(BaseBiclusteringAlgorithm):
     def _validate_parameters(self):
         if self.corr_thr < 0.0 or self.corr_thr > 1.0:
             raise ValueError("'corr_thr' value must be between 0.0 and 1.0")
+
         if self.min_cols < 3:
             raise ValueError("'min_cols' value must be a positive integer greater than or equal to 3")
+
+    def _validate_data(self):
+        """BCCA does not require any data validation step."""
+        pass

@@ -171,3 +171,7 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
     def _validate_parameters(self):
         if self.num_biclusters <= 0 or self.randomized_searches <= 0:
             raise ValueError("'num_biclusters' and 'randomized_searches' must be greater than zero")
+
+    def _validate_data(self):
+        """LAS does not require any data validation step."""
+        pass

@@ -68,5 +68,8 @@ class Biclustering:
     def __init__(self, biclusters):
         self.biclusters = biclusters
 
+    def __len__(self):
+        return len(self.biclusters)
+
     def __str__(self):
         return '\n'.join(str(b) for b in self.biclusters)

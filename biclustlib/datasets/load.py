@@ -25,9 +25,9 @@ import numpy as np
 import pandas as pd
 
 def load_yeast_tavazoie():
-    """Load and return the yeast dataset used in the original biclustering study of Cheng and Church (2000)
-    as a pandas.DataFrame. All elements equal to -1 are missing values. This dataset is freely available
-    in http://arep.med.harvard.edu/biclustering/.
+    """Load and return the yeast dataset (Tavazoie et al., 2000) used in the original biclustering study
+    of Cheng and Church (2000) as a pandas.DataFrame. All elements equal to -1 are missing values. This
+    dataset is freely available in http://arep.med.harvard.edu/biclustering/.
 
     Reference
     ---------
@@ -78,7 +78,7 @@ def load_yeast_benchmark():
     benchmark_dir_path = join(module_dir, 'data', 'yeast_benchmark')
 
     return _load_benchmark(benchmark_dir_path,
-                           read_func=lambda f : pd.read_csv(f, delim_whitespace=True, index_col=[0, 1]),
+                           read_func=lambda f : pd.read_csv(f, delim_whitespace=True, header=0, index_col=[0, 1]),
                            split_func=lambda f : f.split('.')[0])
 
 def load_cancer_benchmark():

@@ -18,6 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ce import biclustering_error
+from subspace import clustering_error
+from subspace import relative_non_intersecting_area
 from prelic import prelic_relevance
 from prelic import prelic_recovery

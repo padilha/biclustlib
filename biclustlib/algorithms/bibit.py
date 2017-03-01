@@ -96,5 +96,6 @@ class BitPatternBiclusteringAlgorithm(BaseBiclusteringAlgorithm):
     def _validate_data(self, data):
         if not issubclass(data.dtype.type, np.integer):
             raise ValueError("'data' must be a numpy.ndarray with integer dtype")
+
         if not np.max(data) == 1 or not np.min(data) == 0:
             raise ValueError("'data' must be a numpy.ndarray with binary values")

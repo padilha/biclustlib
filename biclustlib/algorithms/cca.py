@@ -187,8 +187,7 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
         return msr, row_msr, col_msr
 
     def _calculate_msr_col_addition(self, data, rows, cols):
-        """Calculate the mean squared residues of the rows, of the inverse of the rows and of the columns for
-        the node addition step."""
+        """Calculate the mean squared residues of the columns for the node addition step."""
         data_mean = np.mean(data[rows][:, cols])
         row_means = np.mean(data[:, cols], axis=1)
         col_means = np.mean(data[rows], axis=0)
@@ -200,7 +199,7 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
         return col_msr
 
     def _calculate_msr_row_addition(self, data, rows, cols):
-        """Calculate the mean squared residues of the rows, of the inverse of the rows and of the columns for
+        """Calculate the mean squared residues of the rows and of the inverse of the rows for
         the node addition step."""
         data_mean = np.mean(data[rows][:, cols])
         row_means = np.mean(data[:, cols], axis=1)

@@ -100,8 +100,8 @@ def _calculate_size(predicted_biclustering, reference_biclustering, num_rows, nu
         return np.sum(np.maximum(pred_count, true_count))
     elif operation == 'intersection':
         return np.sum(np.minimum(pred_count, true_count))
-    else:
-        raise ValueError("Invalid 'operation' value. 'operation' must be equal to 'union' or to 'intersection'")
+
+    raise ValueError("Invalid 'operation' value. 'operation' must be equal to 'union' or to 'intersection'")
 
 def _calculate_dmax(predicted_biclustering, reference_biclustering):
     pred_sets = _bic2sets(predicted_biclustering)

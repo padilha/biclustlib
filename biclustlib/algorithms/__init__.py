@@ -22,5 +22,6 @@ from bcca import BiCorrelationClusteringAlgorithm
 from bibit import BitPatternBiclusteringAlgorithm
 from cca import ChengChurchAlgorithm
 from las import LargeAverageSubmatrices
+from plaid import Plaid
 from spectral import Spectral
 from xmotifs import ConservedGeneExpressionMotifs

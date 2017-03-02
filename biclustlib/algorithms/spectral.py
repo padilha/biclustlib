@@ -52,13 +52,13 @@ class Spectral(BaseBiclusteringAlgorithm):
     num_jobs : int, default: 1
         Number of parallel jobs to perform the algorithm.
 
-    **params: dict
+    **kwargs: dict
         See sklearn.cluster.bicluster.SpectralBiclustering documentation.
     """
 
-    def __init__(self, num_clusters=3, normalization_method='bistochastic', num_vectors=6, num_best=2, num_jobs=1, **params):
+    def __init__(self, num_clusters=3, normalization_method='bistochastic', num_vectors=6, num_best=2, num_jobs=1, **kwargs):
         self.num_clusters = num_clusters
-        self.spectral = SpectralBiclustering(num_clusters, normalization_method, num_vectors, num_best, n_jobs=num_jobs, **params)
+        self.spectral = SpectralBiclustering(num_clusters, normalization_method, num_vectors, num_best, n_jobs=num_jobs, **kwargs)
 
     def run(self, data):
         """Compute biclustering.

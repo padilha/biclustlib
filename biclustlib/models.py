@@ -48,7 +48,7 @@ class Bicluster:
         return len(self.rows) * len(self.cols)
 
     def sort(self):
-        """Sorts the array of rows and the array of column indices of the bicluster."""
+        """Sorts the array of row and the array of column indices of the bicluster."""
         self.rows.sort()
         self.cols.sort()
 

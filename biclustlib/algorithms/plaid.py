@@ -179,11 +179,11 @@ class Plaid(BaseBiclusteringAlgorithm):
     def _is_significant(self, residuals, layer):
         """Tests a layer for significance."""
         layer_sum_of_squares = np.sum(layer * layer)
-        residuals_copy = np.copy(residuals)
+        shuffled_residuals = np.copy(residuals)
 
         for i in range(self.significance_tests):
-            np.random.shuffle(residuals_copy.flat)
-            _, _, test_layer = self._fit_layer(residuals_copy)
+            np.random.shuffle(shuffled_residuals.flat)
+            _, _, test_layer = self._fit_layer(shuffled_residuals)
             test_layer_sum_of_squares = np.sum(test_layer * test_layer)
 
             # If the sum of squares of the layer found in the shuffled dataset is greater than the sum of

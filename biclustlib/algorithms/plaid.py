@@ -202,12 +202,12 @@ class Plaid(BaseBiclusteringAlgorithm):
                 residuals[b.rows[:, np.newaxis], b.cols] -= layers[j]
 
     def _validate_parameters(self):
-        if self.num_biclusters <= 0 or self.significance_tests <= 0 or \
-           self.back_fitting_steps <= 0 or self.initialization_iterations <= 0 or \
-           self.iterations_per_layer < 0:
-            raise ValueError("'num_biclusters', 'significance_tests', 'back_fitting_steps', "
-                             "'initialization_iterations' and 'iterations_per_layer' values "
+        if self.num_biclusters <= 0 or self.initialization_iterations <= 0 or self.iterations_per_layer < 0:
+            raise ValueError("'num_biclusters', 'initialization_iterations' and 'iterations_per_layer' values "
                              "must all be greater than zero")
+
+        if self.significance_tests < 0 or self.back_fitting_steps < 0:
+            raise ValueError("'significance_tests' and 'back_fitting_steps' must be greater than or equal to zero")
 
         if self.row_prunning_threshold >= 1.0 or self.row_prunning_threshold <= 0.0 or \
            self.col_prunning_threshold >= 1.0 or self.col_prunning_threshold <= 0.0:

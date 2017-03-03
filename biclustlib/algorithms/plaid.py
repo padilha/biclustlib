@@ -27,7 +27,7 @@ import numpy as np
 class Plaid(BaseBiclusteringAlgorithm):
     """Plaid biclustering algorithm.
 
-    This algorithm fits the plaid model using a binary least squares algorithm.
+    This algorithm fits the plaid model using a binary least squares approach.
 
     Reference
     ----------
@@ -61,7 +61,12 @@ class Plaid(BaseBiclusteringAlgorithm):
         Number of prunning iterations per layer.
 
     return_layers : int, default: False
-        If True the algorithm also returns the layers computed.
+        If True the method 'run' of this algorithm will return a tuple (biclustering solution, layers).
+        In this case, the first and last biclusters will consist in the full data matrix, because the
+        first layer will be the background layer and the last layer will be the residual error.
+
+        If 'return_layers' is False, Plaid will return only the found biclusters, excluding the first
+        one if fit_background_layer is True and excluding the last one (which will be the residual error layer).
     """
 
     def __init__(self, num_biclusters=10, fit_background_layer=True, row_prunning_threshold=0.5,
@@ -78,8 +83,7 @@ class Plaid(BaseBiclusteringAlgorithm):
         self.return_layers = return_layers
 
     def run(self, data):
-        """Compute biclustering. If the attribute 'return_layers' is True, this method returns
-        a tuple (biclustering solution, layers). Otherwise it just returns the biclustering solution.
+        """Compute biclustering.
 
         Parameters
         ----------
@@ -113,6 +117,8 @@ class Plaid(BaseBiclusteringAlgorithm):
         biclustering = Biclustering(biclusters)
 
         if self.return_layers:
+            layers.append(residuals)
+            biclustering.biclusters.append(Bicluster(np.arange(num_rows), np.arange(num_cols)))
             return biclustering, layers
 
         if self.fit_background_layer:
@@ -135,7 +141,7 @@ class Plaid(BaseBiclusteringAlgorithm):
         return mean + row_effects[:, np.newaxis] + col_effects
 
     def _kmeans_initialization(self, residuals):
-        """Computes K-means with K = 2 to find the initial components (rows or columns) of a new layer/bicluster."""
+        """Computes k-means with k = 2 to find the initial components (rows or columns) of a new layer/bicluster."""
         _, labels, _ = k_means(residuals, n_clusters=2, n_init=self.initialization_iterations, return_n_iter=False)
         count0, count1 = np.bincount(labels)
 
@@ -190,10 +196,10 @@ class Plaid(BaseBiclusteringAlgorithm):
     def _back_fitting(self, residuals, layers, biclusters):
         """Performs back fitting steps."""
         for i in range(self.back_fitting_steps):
-            for i, b in zip(range(len(layers)), biclusters):
-                residuals[b.rows[:, np.newaxis], b.cols] += layers[i]
-                layers[i] = self._create_layer(residuals[b.rows[:, np.newaxis], b.cols])
-                residuals[b.rows[:, np.newaxis], b.cols] -= layers[i]
+            for j, b in zip(range(len(layers)), biclusters):
+                residuals[b.rows[:, np.newaxis], b.cols] += layers[j]
+                layers[j] = self._create_layer(residuals[b.rows[:, np.newaxis], b.cols])
+                residuals[b.rows[:, np.newaxis], b.cols] -= layers[j]
 
     def _validate_parameters(self):
         if self.num_biclusters <= 0 or self.significance_tests <= 0 or \

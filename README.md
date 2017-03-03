@@ -4,7 +4,7 @@ biclustlib is a Python library of biclustering algorithms, evaluation measures a
 
 ## Installation
 
-TODO
+TO DO
 
 ### Dependencies
 

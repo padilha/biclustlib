@@ -21,6 +21,7 @@
 from _base import BaseBiclusteringAlgorithm
 from ..models import Bicluster, Biclustering
 from sklearn.cluster import k_means
+from sklearn.utils.validation import check_array
 
 import numpy as np
 
@@ -89,6 +90,7 @@ class Plaid(BaseBiclusteringAlgorithm):
         ----------
         data : numpy.ndarray
         """
+        data = check_array(data, dtype=np.double, copy=True)
         self._validate_parameters()
 
         residuals = np.copy(data)
@@ -142,7 +144,7 @@ class Plaid(BaseBiclusteringAlgorithm):
 
     def _kmeans_initialization(self, residuals):
         """Computes k-means with k = 2 to find the initial components (rows or columns) of a new layer/bicluster."""
-        _, labels, _ = k_means(residuals, n_clusters=2, n_init=self.initialization_iterations, return_n_iter=False)
+        _, labels, _ = k_means(residuals, n_clusters=2, n_init=self.initialization_iterations, return_n_iter=False, init='random')
         count0, count1 = np.bincount(labels)
 
         if count0 <= count1:
@@ -202,18 +204,29 @@ class Plaid(BaseBiclusteringAlgorithm):
                 residuals[b.rows[:, np.newaxis], b.cols] -= layers[j]
 
     def _validate_parameters(self):
-        if self.num_biclusters <= 0 or self.initialization_iterations <= 0 or self.iterations_per_layer < 0:
-            raise ValueError("'num_biclusters', 'initialization_iterations' and 'iterations_per_layer' values "
-                             "must all be greater than zero")
+        if self.num_biclusters <= 0:
+            raise ValueError("num_biclusters must be > 0, got {}".format(self.num_biclusters))
 
-        if self.significance_tests < 0 or self.back_fitting_steps < 0:
-            raise ValueError("'significance_tests' and 'back_fitting_steps' must be greater than or equal to zero")
+        if not isinstance(self.fit_background_layer, bool):
+            raise ValueError("fit_background_layer must be either True or False, got {}".format(self.fit_background_layer))
 
-        if self.row_prunning_threshold >= 1.0 or self.row_prunning_threshold <= 0.0 or \
-           self.col_prunning_threshold >= 1.0 or self.col_prunning_threshold <= 0.0:
-            raise ValueError("both 'row_prunning_threshold' and 'col_prunning_threshold' must be "
-                             "greater than zero and less than 1.0")
+        if self.initialization_iterations <= 0:
+            raise ValueError("initialization_iterations must be > 0, got {}".format(self.initialization_iterations))
 
-    def _validate_data(self):
-        """Plaid does not require any data validation step."""
-        pass
+        if self.iterations_per_layer <= 0:
+            raise ValueError("iterations_per_layer must be > 0, got {}".format(self.iterations_per_layer))
+
+        if self.significance_tests < 0:
+            raise ValueError("significance_tests must be >= 0, got {}".format(self.significance_tests))
+
+        if self.back_fitting_steps < 0:
+            raise ValueError("back_fitting_steps must be >= 0, got {}".format(self.back_fitting_steps))
+
+        if not (0.0 < self.row_prunning_threshold < 1.0):
+            raise ValueError("row_prunning_threshold must be > 0.0 and < 1.0, got {}".format(self.row_prunning_threshold))
+
+        if not (0.0 < self.col_prunning_threshold < 1.0):
+            raise ValueError("col_prunning_threshold must be > 0.0 and < 1.0, got {}".format(self.col_prunning_threshold))
+
+        if not isinstance(self.return_layers, bool):
+            raise ValueError("return_layers must be either True or False, got {}".format(self.return_layers))

@@ -33,8 +33,3 @@ class BaseBiclusteringAlgorithm(object):
     def _validate_parameters(self):
         """Method to validate the input parameters of a biclustering algorithm, if necessary."""
         pass
-
-    @abstractmethod
-    def _validate_data(self, data):
-        """Method to validate the input data, if necessary."""
-        pass

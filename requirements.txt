@@ -1,5 +1,5 @@
-numpy
-scipy
+numpy>=1.12
+scipy>=0.19
 sklearn
 pandas
 bottleneck

@@ -82,7 +82,3 @@ class Spectral(BaseBiclusteringAlgorithm):
         """This Spectral wrapper does not require any data parameters validation step. Refer to the _check_parameters method of the
         class sklearn.cluster.bicluster.SpectralBiclustering."""
         pass
-
-    def _validate_data(self):
-        """Spectral does not require any data validation step."""
-        pass

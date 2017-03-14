@@ -23,6 +23,7 @@ from ..models import Bicluster, Biclustering
 from sklearn.preprocessing import scale
 from scipy.stats import norm
 from operator import itemgetter
+from sklearn.utils.validation import check_array
 
 import bottleneck as bn
 import numpy as np
@@ -69,6 +70,7 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
         ----------
         data : numpy.ndarray
         """
+        data = check_array(data, dtype=np.double, copy=True)
         self._validate_parameters()
 
         data = scale(data)
@@ -169,9 +171,11 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
         return np.append(0, log_cumsum) # 0 because log 0! = log 1 = 0, so this array will have size n + 1
 
     def _validate_parameters(self):
-        if self.num_biclusters <= 0 or self.randomized_searches <= 0:
-            raise ValueError("'num_biclusters' and 'randomized_searches' must be greater than zero")
+        if self.num_biclusters <= 0:
+            raise ValueError("num_biclusters must be > 0, got {}".format(num_biclusters))
 
-    def _validate_data(self):
-        """LAS does not require any data validation step."""
-        pass
+        if self.randomized_searches <= 0:
+            raise ValueError("randomized_searches must be > 0, got {}".format(self.randomized_searches))
+
+        if not isinstance(transform, bool):
+            raise ValueError("transform must be either True or False, got {}".format(self.transform))

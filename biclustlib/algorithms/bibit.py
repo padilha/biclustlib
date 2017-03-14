@@ -22,6 +22,7 @@ from ._base import BaseBiclusteringAlgorithm
 from ..models import Bicluster, Biclustering
 from itertools import combinations
 from gmpy import popcount
+from sklearn.utils.validation import check_array
 
 import numpy as np
 
@@ -55,8 +56,8 @@ class BitPatternBiclusteringAlgorithm(BaseBiclusteringAlgorithm):
         ----------
         data : numpy.ndarray
         """
+        data = check_array(data, dtype=np.bool, copy=True)
         self._validate_parameters()
-        self._validate_data(data)
 
         data = [np.packbits(row) for row in data]
         biclusters = []
@@ -90,12 +91,8 @@ class BitPatternBiclusteringAlgorithm(BaseBiclusteringAlgorithm):
         return False
 
     def _validate_parameters(self):
-        if self.min_rows < 2 or self.min_cols < 2:
-            raise ValueError("'min_rows' and 'min_cols' must be greater than or equal to 2")
+        if self.min_rows < 2:
+            raise ValueError("min_rows must be >= 2, got {}".format(self.min_rows))
 
-    def _validate_data(self, data):
-        if not issubclass(data.dtype.type, np.integer):
-            raise ValueError("'data' must be a numpy.ndarray with integer dtype")
-
-        if not np.max(data) == 1 or not np.min(data) == 0:
-            raise ValueError("'data' must be a numpy.ndarray with binary values")
+        if self.min_cols < 2:
+            raise ValueError("min_cols must be >= 2, got {}".format(self.min_cols))

@@ -20,6 +20,7 @@
 
 from ._base import BaseBiclusteringAlgorithm
 from ..models import Bicluster, Biclustering
+from sklearn.utils.validation import check_array
 
 import numpy as np
 
@@ -66,8 +67,8 @@ class ConservedGeneExpressionMotifs(BaseBiclusteringAlgorithm):
         ----------
         data : numpy.ndarray
         """
+        data = check_array(data, dtype=np.int, copy=True)
         self._validate_parameters()
-        self._validate_data(data)
 
         num_remaining_rows, num_cols = data.shape
         remaining_rows = np.ones(num_remaining_rows, np.bool)
@@ -113,12 +114,17 @@ class ConservedGeneExpressionMotifs(BaseBiclusteringAlgorithm):
         return best_motif
 
     def _validate_parameters(self):
-        if self.num_biclusters <= 0 or self.num_seeds <= 0 or self.num_sets <= 0 or self.set_size <= 0:
-            raise ValueError("'num_biclusters', 'num_seeds', 'num_sets' and 'set_size' must be greater than zero")
+        if self.num_biclusters <= 0:
+            raise ValueError("num_biclusters must be > 0, got {}".format(self.num_biclusters))
 
-        if self.alpha < 0.0 or self.alpha > 1.0:
-            raise ValueError("'alpha' must assume a value between 0.0 and 1.0")
+        if self.num_seeds <= 0:
+            raise ValueError("num_seeds must be > 0, got {}".format(self.num_seeds))
 
-    def _validate_data(self, data):
-        if not issubclass(data.dtype.type, np.integer):
-            raise ValueError('XMotifs requires discrete data')
+        if self.num_sets <= 0:
+            raise ValueError("num_sets must be > 0, got {}".format(self.num_sets))
+
+        if self.set_size <= 0:
+            raise ValueError("set_size must be > 0, got {}".format(self.set_size))
+
+        if not (0.0 <= self.alpha <= 1.0):
+            raise ValueError("alpha must be >= 0.0 and <= 1.0, got".format(self.alpha))

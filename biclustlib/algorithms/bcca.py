@@ -21,6 +21,7 @@
 from ._base import BaseBiclusteringAlgorithm
 from ..models import Bicluster, Biclustering
 from itertools import combinations
+from sklearn.utils.validation import check_array
 
 import numpy as np
 
@@ -38,15 +39,15 @@ class BiCorrelationClusteringAlgorithm(BaseBiclusteringAlgorithm):
 
     Parameters
     ----------
-    corr_thr : float, default: 0.9
+    correlation_threshold : float, default: 0.9
         Correlation threshold for the final biclusters.
 
     min_cols : int, default: 3
         Minimum number of columns allowed in the final biclusters.
     """
 
-    def __init__(self, corr_thr=0.9, min_cols=3):
-        self.corr_thr = corr_thr
+    def __init__(self, correlation_threshold=0.9, min_cols=3):
+        self.correlation_threshold = correlation_threshold
         self.min_cols = min_cols
 
     def run(self, data):
@@ -56,6 +57,7 @@ class BiCorrelationClusteringAlgorithm(BaseBiclusteringAlgorithm):
         ----------
         data : numpy.ndarray
         """
+        data = check_array(data, dtype=np.double, copy=True)
         self._validate_parameters()
 
         num_rows, num_cols = data.shape
@@ -64,7 +66,7 @@ class BiCorrelationClusteringAlgorithm(BaseBiclusteringAlgorithm):
         for i, j in combinations(range(num_rows), 2):
             cols, corr = self._find_cols(data[i], data[j])
 
-            if len(cols) >= self.min_cols and corr >= self.corr_thr:
+            if len(cols) >= self.min_cols and corr >= self.correlation_threshold:
                 rows = [i, j]
 
                 for k, r in enumerate(data):
@@ -85,7 +87,7 @@ class BiCorrelationClusteringAlgorithm(BaseBiclusteringAlgorithm):
         cols = np.arange(len(ri), dtype=np.int)
         corr = self._corr(ri, rj)
 
-        while corr < self.corr_thr and len(cols) >= self.min_cols:
+        while corr < self.correlation_threshold and len(cols) >= self.min_cols:
             imax = self._find_max_decrease(ri, rj, cols)
             cols = np.delete(cols, imax)
             corr = self._corr(ri[cols], rj[cols])
@@ -112,7 +114,7 @@ class BiCorrelationClusteringAlgorithm(BaseBiclusteringAlgorithm):
         for i in rows:
             corr = self._corr(r, data[i, cols])
 
-            if corr < self.corr_thr:
+            if corr < self.correlation_threshold:
                 return False
 
         return True
@@ -136,12 +138,8 @@ class BiCorrelationClusteringAlgorithm(BaseBiclusteringAlgorithm):
         return False
 
     def _validate_parameters(self):
-        if self.corr_thr < 0.0 or self.corr_thr > 1.0:
-            raise ValueError("'corr_thr' value must be between 0.0 and 1.0")
+        if not (0.0 <= self.correlation_threshold <= 1.0):
+            raise ValueError("correlation_threshold must be >= 0.0 and <= 1.0, got {}".format(self.correlation_threshold))
 
         if self.min_cols < 3:
-            raise ValueError("'min_cols' value must be a positive integer greater than or equal to 3")
-
-    def _validate_data(self):
-        """BCCA does not require any data validation step."""
-        pass
+            raise ValueError("min_cols must be >= 3, got {}".format(self.min_cols))

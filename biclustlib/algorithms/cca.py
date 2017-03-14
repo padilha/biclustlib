@@ -20,6 +20,7 @@
 
 from _base import BaseBiclusteringAlgorithm
 from ..models import Bicluster, Biclustering
+from sklearn.utils.validation import check_array
 
 import numpy as np
 
@@ -60,6 +61,7 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
         ----------
         data : numpy.ndarray
         """
+        data = check_array(data, dtype=np.double, copy=True)
         self._validate_parameters()
 
         data = np.copy(data)
@@ -217,14 +219,13 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
 
     def _validate_parameters(self):
         if self.num_biclusters <= 0:
-            raise ValueError("'num_biclusters' must be greater than zero")
+            raise ValueError("num_biclusters must be > 0, got {}".format(self.num_biclusters))
 
         if self.msr_threshold < 0.0:
-            raise ValueError("'msr_threshold' must be greater than or equal to zero")
+            raise ValueError("msr_threshold must be >= 0.0, got {}".format(self.msr_threshold))
 
         if self.multiple_node_deletion_threshold < 1.0:
-            raise ValueError("'multiple_node_deletion_threshold' must be greater than or equal to 1")
+            raise ValueError("multiple_node_deletion_threshold must be >= 1.0, got {}".format(self.multiple_node_deletion_threshold))
 
-    def _validate_data(self):
-        """CCA does not require any data validation step."""
-        pass
+        if self.data_min_cols < 100:
+            raise ValueError("data_min_cols must be >= 100, got {}".format(self.data_min_cols))

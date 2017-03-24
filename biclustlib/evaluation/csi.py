@@ -68,12 +68,10 @@ def csi(predicted_biclustering, reference_biclustering, num_rows, num_cols, spar
     predicted_association = _calculate_association(predicted_clustering, num_rows, num_cols, sparse)
     predicted_coassociation = _calculate_coassociation(predicted_association)
     predicted_beta = _calculate_beta(predicted_association)
-    print predicted_beta
 
     reference_association = _calculate_association(reference_clustering, num_rows, num_cols, sparse)
     reference_coassociation = _calculate_coassociation(reference_association)
     reference_beta = _calculate_beta(reference_association)
-    print reference_beta
 
     agreements = _calculate_agreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse)
     disagreements = _calculate_disagreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse)
@@ -119,7 +117,7 @@ def _calculate_agreements(predicted_coassociation, reference_coassociation, pred
     return min_alpha.sum() + min_beta.sum() * (num_objects - 1)
 
 def _calculate_disagreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse):
-    num_objects = len(predicted_beta)
+    num_objects = predicted_coassociation.shape[0]
     abs_alpha = abs(_triu(predicted_coassociation - reference_coassociation, sparse))
     abs_beta = abs(predicted_beta - reference_beta)
     return abs_alpha.sum() + abs_beta.sum() * (num_objects - 1)

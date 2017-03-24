@@ -68,10 +68,12 @@ def csi(predicted_biclustering, reference_biclustering, num_rows, num_cols, spar
     predicted_association = _calculate_association(predicted_clustering, num_rows, num_cols, sparse)
     predicted_coassociation = _calculate_coassociation(predicted_association)
     predicted_beta = _calculate_beta(predicted_association)
+    print predicted_beta
 
     reference_association = _calculate_association(reference_clustering, num_rows, num_cols, sparse)
     reference_coassociation = _calculate_coassociation(reference_association)
     reference_beta = _calculate_beta(reference_association)
+    print reference_beta
 
     agreements = _calculate_agreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse)
     disagreements = _calculate_disagreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse)
@@ -92,7 +94,10 @@ def _biclustering_to_soft_clustering(biclustering, num_rows, num_cols):
     return soft_clustering
 
 def _calculate_association(clustering, num_rows, num_cols, sparse):
-    association = _zeros(clustering, num_rows, num_cols, sparse)
+    if sparse:
+        association = sp.dok_matrix((len(clustering), num_rows * num_cols), dtype=np.int)
+    else:
+        association = np.zeros((len(clustering), num_rows * num_cols), dtype=np.int)
 
     for k, c in enumerate(clustering):
         association[k, c] = 1
@@ -108,7 +113,7 @@ def _calculate_beta(association):
     return association.sum(axis=0) - 1
 
 def _calculate_agreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse):
-    num_objects = len(predicted_beta)
+    num_objects = predicted_coassociation.shape[0]
     min_alpha = _triu(predicted_coassociation.minimum(reference_coassociation), sparse)
     min_beta = np.minimum(predicted_beta, reference_beta)
     return min_alpha.sum() + min_beta.sum() * (num_objects - 1)
@@ -121,10 +126,5 @@ def _calculate_disagreements(predicted_coassociation, reference_coassociation, p
 
 def _triu(a, sparse):
     if sparse:
-        return sp.triu(a, k=1).sum()
-    return np.triu(a, k=1).sum()
-
-def _zeros(clustering, num_rows, num_cols, sparse):
-    if sparse:
-        return sp.dok_matrix((len(clustering), num_rows * num_cols), dtype=np.int)
-    return np.zeros((len(clustering), num_rows * num_cols), dtype=np.int)
+        return sp.triu(a, k=1)
+    return np.triu(a, k=1)

@@ -60,19 +60,11 @@ class Plaid(BaseBiclusteringAlgorithm):
 
     iterations_per_layer : int, default: 10
         Number of prunning iterations per layer.
-
-    return_layers : int, default: False
-        If True the method 'run' of this algorithm will return a tuple (biclustering solution, layers).
-        In this case, the first and last biclusters will consist in the full data matrix, because the
-        first layer will be the background layer and the last layer will be the residual error.
-
-        If 'return_layers' is False, Plaid will return only the found biclusters, excluding the first
-        one if fit_background_layer is True and excluding the last one (which will be the residual error layer).
     """
 
     def __init__(self, num_biclusters=10, fit_background_layer=True, row_prunning_threshold=0.5,
                  col_prunning_threshold=0.5, significance_tests=3, back_fitting_steps=1,
-                 initialization_iterations=6, iterations_per_layer=10, return_layers=False):
+                 initialization_iterations=6, iterations_per_layer=10):
         self.num_biclusters = num_biclusters
         self.fit_background_layer = fit_background_layer
         self.row_prunning_threshold = row_prunning_threshold
@@ -81,7 +73,6 @@ class Plaid(BaseBiclusteringAlgorithm):
         self.back_fitting_steps = back_fitting_steps
         self.initialization_iterations = initialization_iterations
         self.iterations_per_layer = iterations_per_layer
-        self.return_layers = return_layers
 
     def run(self, data):
         """Compute biclustering.
@@ -118,14 +109,8 @@ class Plaid(BaseBiclusteringAlgorithm):
 
         biclustering = Biclustering(biclusters)
 
-        if self.return_layers:
-            layers.append(residuals)
-            biclustering.biclusters.append(Bicluster(np.arange(num_rows), np.arange(num_cols)))
-            return biclustering, layers
-
         if self.fit_background_layer:
             biclusters.pop(0)
-            layers.pop(0)
 
         return biclustering
 
@@ -227,6 +212,3 @@ class Plaid(BaseBiclusteringAlgorithm):
 
         if not (0.0 < self.col_prunning_threshold < 1.0):
             raise ValueError("col_prunning_threshold must be > 0.0 and < 1.0, got {}".format(self.col_prunning_threshold))
-
-        if not isinstance(self.return_layers, bool):
-            raise ValueError("return_layers must be either True or False, got {}".format(self.return_layers))

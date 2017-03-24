@@ -32,7 +32,7 @@ print(biclustering)
 ```
 
 ## Citation
-If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was originally proposed.
+If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was first mentioned and used.
 
 To cite biclustlib use: Padilha, V. A. & Campello, R. J. G. B. (2017). A systematic comparative evaluation of biclustering techniques. *BMC Bioinformatics*, 18(1):55.
 

@@ -56,18 +56,25 @@ def csi(predicted_biclustering, reference_biclustering, num_rows, num_cols, spar
     sparse : bool, default: True
         Wheter the (co)association matrices will be represented as sparse matrices. In most cases
         setting this parameter to True will increase computation efficiency.
+
+    Returns
+    -------
+    csi_value : float
+        Similarity score between 0.0 and 1.0.
     """
     predicted_clustering = _biclustering_to_soft_clustering(predicted_biclustering, num_rows, num_cols)
     reference_clustering = _biclustering_to_soft_clustering(reference_biclustering, num_rows, num_cols)
 
     predicted_association = _calculate_association(predicted_clustering, num_rows, num_cols, sparse)
     predicted_coassociation = _calculate_coassociation(predicted_association)
+    predicted_beta = _calculate_beta(predicted_association)
 
     reference_association = _calculate_association(reference_clustering, num_rows, num_cols, sparse)
     reference_coassociation = _calculate_coassociation(reference_association)
+    reference_beta = _calculate_beta(reference_association)
 
-    agreements = _calculate_agreements(predicted_coassociation, reference_coassociation, predicted_association, reference_association, sparse)
-    disagreements = _calculate_disagreements(predicted_coassociation, reference_coassociation, predicted_association, reference_association, sparse)
+    agreements = _calculate_agreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse)
+    disagreements = _calculate_disagreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse)
 
     return float(agreements) / (agreements + disagreements)
 
@@ -97,11 +104,20 @@ def _calculate_association(clustering, num_rows, num_cols, sparse):
 def _calculate_coassociation(association):
     return association.T.dot(association)
 
-def _calculate_agreements(ju, jv, u, v, sparse):
-    return _triu(ju.minimum(jv), sparse).sum() + np.minimum(u.sum(axis=0) - 1, v.sum(axis=0) - 1).sum()
+def _calculate_beta(association):
+    return association.sum(axis=0) - 1
 
-def _calculate_disagreements(ju, jv, u, v, sparse):
-    return abs(_triu(ju - jv, sparse)).sum() + abs((u.sum(axis=0) - 1) - (v.sum(axis=0) - 1)).sum()
+def _calculate_agreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse):
+    num_objects = len(predicted_beta)
+    min_alpha = _triu(predicted_coassociation.minimum(reference_coassociation), sparse)
+    min_beta = np.minimum(predicted_beta, reference_beta)
+    return min_alpha.sum() + min_beta.sum() * (num_objects - 1)
+
+def _calculate_disagreements(predicted_coassociation, reference_coassociation, predicted_beta, reference_beta, sparse):
+    num_objects = len(predicted_beta)
+    abs_alpha = abs(_triu(predicted_coassociation - reference_coassociation, sparse))
+    abs_beta = abs(predicted_beta - reference_beta)
+    return abs_alpha.sum() + abs_beta.sum() * (num_objects - 1)
 
 def _triu(a, sparse):
     if sparse:
@@ -111,4 +127,4 @@ def _triu(a, sparse):
 def _zeros(clustering, num_rows, num_cols, sparse):
     if sparse:
         return sp.dok_matrix((len(clustering), num_rows * num_cols), dtype=np.int)
-    return np.matrix(np.zeros((len(clustering), num_rows * num_cols), dtype=np.int))
+    return np.zeros((len(clustering), num_rows * num_cols), dtype=np.int)

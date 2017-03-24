@@ -53,10 +53,15 @@ def clustering_error(predicted_biclustering, reference_biclustering, num_rows, n
 
     num_cols : int
         Number of columns of the dataset.
+
+    Returns
+    -------
+    ce : float
+        Similarity score between 0.0 and 1.0.
     """
     union_size = _calculate_size(predicted_biclustering, reference_biclustering, num_rows, num_cols, 'union')
     dmax = _calculate_dmax(predicted_biclustering, reference_biclustering)
-    return float(dmax) / float(union_size)
+    return float(dmax) / union_size
 
 def relative_non_intersecting_area(predicted_biclustering, reference_biclustering, num_rows, num_cols):
     """The Relative Non-Intersecting Area (RNIA) external evaluation measure.
@@ -87,10 +92,15 @@ def relative_non_intersecting_area(predicted_biclustering, reference_biclusterin
 
     num_cols : int
         Number of columns of the dataset.
+
+    Returns
+    -------
+    rnia : float
+        Similarity score between 0.0 and 1.0.
     """
     union_size = _calculate_size(predicted_biclustering, reference_biclustering, num_rows, num_cols, 'union')
     intersection_size = _calculate_size(predicted_biclustering, reference_biclustering, num_rows, num_cols, 'intersection')
-    return float(intersection_size) / float(union_size)
+    return float(intersection_size) / union_size
 
 def _calculate_size(predicted_biclustering, reference_biclustering, num_rows, num_cols, operation):
     pred_count = _count_biclusters(predicted_biclustering, num_rows, num_cols)
@@ -101,7 +111,9 @@ def _calculate_size(predicted_biclustering, reference_biclustering, num_rows, nu
     elif operation == 'intersection':
         return np.sum(np.minimum(pred_count, true_count))
 
-    raise ValueError("Invalid 'operation' value. 'operation' must be equal to 'union' or to 'intersection'")
+    valid_operations = ('union', 'intersection')
+
+    raise ValueError("operation must be one of {0}, got {1}".format(valid_operations, operation))
 
 def _calculate_dmax(predicted_biclustering, reference_biclustering):
     pred_sets = _bic2sets(predicted_biclustering)

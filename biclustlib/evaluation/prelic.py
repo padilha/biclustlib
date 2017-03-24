@@ -44,6 +44,11 @@ def prelic_relevance(predicted_biclustering, reference_biclustering):
 
     reference_biclustering : biclustlib.model.Biclustering
         Reference biclustering solution.
+
+    Returns
+    -------
+    prel : float
+        Similarity score between 0.0 and 1.0.
     """
     row_score = _match_score(predicted_biclustering, reference_biclustering, 'rows')
     col_score = _match_score(predicted_biclustering, reference_biclustering, 'cols')
@@ -70,6 +75,11 @@ def prelic_recovery(predicted_biclustering, reference_biclustering):
 
     reference_biclustering : biclustlib.model.Biclustering
         Reference biclustering solution.
+
+    Returns
+    -------
+    prec : float
+        Similarity score between 0.0 and 1.0.
     """
     return prelic_relevance(reference_biclustering, predicted_biclustering)
 

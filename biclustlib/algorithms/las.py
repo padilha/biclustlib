@@ -177,5 +177,5 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
         if self.randomized_searches <= 0:
             raise ValueError("randomized_searches must be > 0, got {}".format(self.randomized_searches))
 
-        if not isinstance(transform, bool):
+        if not isinstance(self.transform, bool):
             raise ValueError("transform must be either True or False, got {}".format(self.transform))

@@ -23,6 +23,9 @@ from ..models import Bicluster, Biclustering
 from sklearn.utils.validation import check_array
 
 import numpy as np
+import bottleneck as bn
+import random
+import math
 
 class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
     """Cheng and Church's Algorithm (CCA)
@@ -101,20 +104,23 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
         msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
 
         while msr > self.msr_threshold:
-            row_indices = np.where(rows)[0]
-            col_indices = np.where(cols)[0]
-
-            row_max_msr = np.argmax(row_msr)
-            col_max_msr = np.argmax(col_msr)
-
-            if row_msr[row_max_msr] >= col_msr[col_max_msr]:
-                row2remove = row_indices[row_max_msr]
-                rows[row2remove] = False
-            else:
-                col2remove = col_indices[col_max_msr]
-                cols[col2remove] = False
-
+            self._single_deletion(data, rows, cols, row_msr, col_msr)
             msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
+
+    def _single_deletion(self, data, rows, cols, row_msr, col_msr):
+        """Deletes a row or column from the bicluster being computed."""
+        row_indices = np.where(rows)[0]
+        col_indices = np.where(cols)[0]
+
+        row_max_msr = np.argmax(row_msr)
+        col_max_msr = np.argmax(col_msr)
+
+        if row_msr[row_max_msr] >= col_msr[col_max_msr]:
+            row2remove = row_indices[row_max_msr]
+            rows[row2remove] = False
+        else:
+            col2remove = col_indices[col_max_msr]
+            cols[col2remove] = False
 
     def _multiple_node_deletion(self, data, rows, cols):
         """Performs the multiple row/column deletion step (this is a direct implementation of the Algorithm 2 described in
@@ -229,3 +235,62 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
 
         if self.data_min_cols < 100:
             raise ValueError("data_min_cols must be >= 100, got {}".format(self.data_min_cols))
+
+
+class ModifiedChengChurchAlgorithm(ChengChurchAlgorithm):
+    """Modified Cheng and Church's Algorithm (MCCA)
+
+    MCCA searches for maximal submatrices with a Mean Squared Residue value below a pre-defined threshold.
+    In the single node deletion step implemented in this class, the row/column to be dropped is randomly chosen
+    among the top alpha% of the objects or features minimizing the Mean Squared Residue of the remaining
+    matrix.
+
+    Reference
+    ----------
+    Hanczar, B., & Nadif, M. (2012). Ensemble methods for biclustering tasks. Pattern Recognition, 45(11), 3938-3949.
+
+    Parameters
+    ----------
+    num_biclusters : int, default: 10
+        Number of biclusters to be found.
+
+    msr_threshold : float, default: 0.1
+        Maximum mean squared residue accepted (delta parameter in the original paper).
+
+    multiple_node_deletion_threshold : float, default: 1.2
+        Scaling factor to remove multiple rows or columns (alpha parameter in the original paper).
+
+    data_min_cols : int, default: 100
+        Minimum number of dataset columns required to perform multiple column deletion.
+
+    alpha : float, default: 0.05
+        Percentage of the top objects or features that will be considered in the random choice of the
+        modified single node deletion step.
+    """
+
+    def __init__(self, num_biclusters=10, msr_threshold=0.1, multiple_node_deletion_threshold=1.2, data_min_cols=100, alpha=0.05):
+        super(ModifiedChengChurchAlgorithm, self).__init__(num_biclusters, msr_threshold, multiple_node_deletion_threshold, data_min_cols)
+        self.alpha = alpha
+
+    def _single_deletion(self, data, rows, cols, row_msr, col_msr):
+        """Deletes a row or column from the bicluster being computed."""
+        num_rows, num_cols = data.shape
+        choice = random.randint(0, 1)
+
+        if choice:
+            self.__random_deletion(data, rows, row_msr, choice)
+        else:
+            self.__random_deletion(data, cols, col_msr, choice)
+
+    def _validate_parameters(self):
+        super(ModifiedChengChurchAlgorithm, self)._validate_parameters()
+
+        if not (0.0 < self.alpha <= 1.0):
+            raise ValueError("alpha must be > 0.0 and <= 1.0, got {}".format(self.alpha))
+
+    def __random_deletion(self, data, bool_array, msr_array, choice):
+        indices = np.where(bool_array)[0]
+        n = int(math.ceil(len(msr_array) * self.alpha))
+        max_msr_indices = bn.argpartition(msr_array, len(msr_array) - n)[-n:]
+        i = indices[np.random.choice(max_msr_indices)]
+        bool_array[i] = False

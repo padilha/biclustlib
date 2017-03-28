@@ -21,6 +21,7 @@
 import numpy as np
 
 from scipy import sparse as sp
+from check import check_biclusterings
 
 def csi(predicted_biclustering, reference_biclustering, num_rows, num_cols, sparse=True):
     """The Campello Soft Index (CSI) external evaluation measure.
@@ -62,6 +63,12 @@ def csi(predicted_biclustering, reference_biclustering, num_rows, num_cols, spar
     csi_value : float
         Similarity score between 0.0 and 1.0.
     """
+
+    check = check_biclusterings(predicted_biclustering, reference_biclustering)
+
+    if isinstance(check, float):
+        return check
+
     predicted_clustering = _biclustering_to_soft_clustering(predicted_biclustering, num_rows, num_cols)
     reference_clustering = _biclustering_to_soft_clustering(reference_biclustering, num_rows, num_cols)
 

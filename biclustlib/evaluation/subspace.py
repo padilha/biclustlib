@@ -23,6 +23,7 @@ import numpy as np
 
 from munkres import Munkres
 from itertools import product
+from check import check_biclusterings
 
 def clustering_error(predicted_biclustering, reference_biclustering, num_rows, num_cols):
     """The Clustering Error (CE) external evaluation measure.
@@ -59,8 +60,14 @@ def clustering_error(predicted_biclustering, reference_biclustering, num_rows, n
     ce : float
         Similarity score between 0.0 and 1.0.
     """
+    check = check_biclusterings(predicted_biclustering, reference_biclustering)
+
+    if isinstance(check, float):
+        return check
+
     union_size = _calculate_size(predicted_biclustering, reference_biclustering, num_rows, num_cols, 'union')
     dmax = _calculate_dmax(predicted_biclustering, reference_biclustering)
+
     return float(dmax) / union_size
 
 def relative_non_intersecting_area(predicted_biclustering, reference_biclustering, num_rows, num_cols):
@@ -98,8 +105,14 @@ def relative_non_intersecting_area(predicted_biclustering, reference_biclusterin
     rnia : float
         Similarity score between 0.0 and 1.0.
     """
+    check = check_biclusterings(predicted_biclustering, reference_biclustering)
+
+    if isinstance(check, float):
+        return check
+
     union_size = _calculate_size(predicted_biclustering, reference_biclustering, num_rows, num_cols, 'union')
     intersection_size = _calculate_size(predicted_biclustering, reference_biclustering, num_rows, num_cols, 'intersection')
+
     return float(intersection_size) / union_size
 
 def _calculate_size(predicted_biclustering, reference_biclustering, num_rows, num_cols, operation):

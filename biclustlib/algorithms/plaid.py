@@ -49,10 +49,10 @@ class Plaid(BaseBiclusteringAlgorithm):
     col_prunning_threshold : float, default: 0.5
         Threshold for column prunning.
 
-    significance_tests : int, default: 3
+    significance_tests : int, default: 0
         Number of significance tests to be performed for a layer.
 
-    back_fitting_steps : int, default: 0
+    back_fitting_steps : int, default: 1
         Number of back fitting steps.
 
     initialization_iterations : int, default: 6
@@ -63,7 +63,7 @@ class Plaid(BaseBiclusteringAlgorithm):
     """
 
     def __init__(self, num_biclusters=10, fit_background_layer=True, row_prunning_threshold=0.5,
-                 col_prunning_threshold=0.5, significance_tests=3, back_fitting_steps=1,
+                 col_prunning_threshold=0.5, significance_tests=0, back_fitting_steps=1,
                  initialization_iterations=6, iterations_per_layer=10):
         self.num_biclusters = num_biclusters
         self.fit_background_layer = fit_background_layer

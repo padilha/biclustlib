@@ -129,7 +129,7 @@ class Plaid(BaseBiclusteringAlgorithm):
 
     def _kmeans_initialization(self, residuals):
         """Computes k-means with k = 2 to find the initial components (rows or columns) of a new layer/bicluster."""
-        _, labels, _ = k_means(residuals, n_clusters=2, n_init=self.initialization_iterations, return_n_iter=False, init='random')
+        _, labels, _ = k_means(residuals, n_clusters=2, n_init=self.initialization_iterations, n_jobs=1)
         count0, count1 = np.bincount(labels)
 
         if count0 <= count1:

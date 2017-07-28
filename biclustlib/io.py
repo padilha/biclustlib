@@ -33,7 +33,7 @@ def load_biclusterings(file_path):
 
 def _biclustering_to_dict(bic):
     d = {'__class__' : bic.__class__.__name__, '__module__' : bic.__module__}
-    d['biclusters'] =  [(list(b.rows), list(b.cols)) for b in bic.biclusters]
+    d['biclusters'] =  [(list(map(int, b.rows)), list(map(int, b.cols))) for b in bic.biclusters]
     return d
 
 def _dict_to_biclustering(bic_dict):

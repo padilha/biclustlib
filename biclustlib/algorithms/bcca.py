@@ -63,7 +63,7 @@ class BiCorrelationClusteringAlgorithm(BaseBiclusteringAlgorithm):
         num_rows, num_cols = data.shape
         biclusters = []
 
-        for i, j in combinations(list(range(num_rows)), 2):
+        for i, j in combinations(range(num_rows), 2):
             cols, corr = self._find_cols(data[i], data[j])
 
             if len(cols) >= self.min_cols and corr >= self.correlation_threshold:

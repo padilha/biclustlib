@@ -21,7 +21,7 @@
 import numpy as np
 
 from math import sqrt
-from check import check_biclusterings
+from .check import check_biclusterings
 
 def prelic_relevance(predicted_biclustering, reference_biclustering):
     """The overall relevance match score defined in the supplementary material of Prelic et al. (2006).

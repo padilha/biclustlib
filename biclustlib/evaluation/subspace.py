@@ -23,7 +23,7 @@ import numpy as np
 
 from munkres import Munkres
 from itertools import product
-from check import check_biclusterings
+from .check import check_biclusterings
 
 def clustering_error(predicted_biclustering, reference_biclustering, num_rows, num_cols):
     """The Clustering Error (CE) external evaluation measure.

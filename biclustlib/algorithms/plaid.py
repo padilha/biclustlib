@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from _base import BaseBiclusteringAlgorithm
+from ._base import BaseBiclusteringAlgorithm
 from ..models import Bicluster, Biclustering
 from sklearn.cluster import k_means
 from sklearn.utils.validation import check_array

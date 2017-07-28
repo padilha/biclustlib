@@ -1,6 +1,6 @@
 import json
 
-from models import Bicluster, Biclustering
+from .models import Bicluster, Biclustering
 
 def save_biclusterings(b, file_path, extension='json'):
     """Dumps biclusterings to a file using the json module.
@@ -37,4 +37,4 @@ def _biclustering_to_dict(bic):
     return d
 
 def _dict_to_biclustering(bic_dict):
-    return Biclustering([Bicluster(rows, cols) for rows, cols in bic_dict[u'biclusters']])
+    return Biclustering([Bicluster(rows, cols) for rows, cols in bic_dict['biclusters']])

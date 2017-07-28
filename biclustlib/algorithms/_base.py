@@ -20,9 +20,8 @@
 
 from abc import ABCMeta, abstractmethod
 
-class BaseBiclusteringAlgorithm(object):
+class BaseBiclusteringAlgorithm(object, metaclass=ABCMeta):
     """A class that defines the skeleton of a biclustering algorithm implementation."""
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def run(self, data):

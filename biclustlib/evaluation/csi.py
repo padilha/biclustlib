@@ -21,7 +21,7 @@
 import numpy as np
 
 from scipy import sparse as sp
-from check import check_biclusterings
+from .check import check_biclusterings
 
 def csi(predicted_biclustering, reference_biclustering, num_rows, num_cols, sparse=True):
     """The Campello Soft Index (CSI) external evaluation measure.

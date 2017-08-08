@@ -5,3 +5,4 @@ pandas
 bottleneck
 munkres
 gmpy
+fabia

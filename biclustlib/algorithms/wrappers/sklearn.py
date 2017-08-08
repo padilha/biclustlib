@@ -74,7 +74,8 @@ class Fabia(SklearnWrapper):
     """Fabia Biclustering. This class is a simple wrapper of Fabia's implementation available in
     the fabia package (https://github.com/untom/pyfabia).
 
-    Fabia is an algorithm
+    Fabia is an algorithm that assumes a multiplicative model and uses a factor analysis approach
+    to fit such a model on the input data.
 
     Reference
     ---------

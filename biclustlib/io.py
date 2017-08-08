@@ -2,7 +2,7 @@ import json
 
 from .models import Bicluster, Biclustering
 
-def save_biclusterings(b, file_path, extension='json'):
+def save_biclusterings(b, file_path):
     """Dumps biclusterings to a file using the json module.
 
     Parameters
@@ -16,7 +16,10 @@ def save_biclusterings(b, file_path, extension='json'):
     extension : str, default: 'json'
         The file extension to be used.
     """
-    with open(file_path + '.' + extension, 'w') as f:
+    if not file_path.endswith('.json'):
+        file_path += '.json'
+
+    with open(file_path, 'w') as f:
         json.dump(b, f, default=_biclustering_to_dict)
 
 def load_biclusterings(file_path):

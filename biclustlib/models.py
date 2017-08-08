@@ -33,8 +33,14 @@ class Bicluster:
     """
 
     def __init__(self, rows, cols):
-        self.rows = np.array(rows, dtype=np.int)
-        self.cols = np.array(cols, dtype=np.int)
+        if rows.dtype == np.bool and cols.dtype == np.bool:
+            self.rows = np.nonzero(rows)[0]
+            self.cols = np.nonzero(cols)[0]
+        elif rows.dtype == np.int and cols.dtype == np.int:
+            self.rows = rows
+            self.cols = cols
+        else:
+            raise ValueError("rows and cols must be bool or int numpy.arrays")
 
     def intersection(self, other):
         """Returns a bicluster that represents the area of overlap between two biclusters."""
@@ -66,10 +72,10 @@ class Biclustering:
     """
 
     def __init__(self, biclusters):
-        self.biclusters = biclusters
-
-    def __len__(self):
-        return len(self.biclusters)
+        if all(isinstance(b, Bicluster) for b in biclusters):
+            self.biclusters = biclusters
+        else:
+            raise ValueError("biclusters list contains an element that is not a Bicluster instance")
 
     def __str__(self):
         return '\n'.join(str(b) for b in self.biclusters)

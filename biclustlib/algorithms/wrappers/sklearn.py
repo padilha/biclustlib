@@ -39,7 +39,7 @@ class SklearnWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         data : numpy.ndarray
         """
         self.algorithm.fit(data)
-        return Biclustering([Bicluster(rows, cols) for rows, cols in zip(*self.algorithm.biclusters_)])
+        return Biclustering([Bicluster(rows, cols) for rows, cols in zip(*self.algorithm.biclusters_) if len(rows) and len(cols)])
 
 
 class Spectral(SklearnWrapper):

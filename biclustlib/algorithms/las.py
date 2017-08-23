@@ -27,6 +27,8 @@ from sklearn.utils.validation import check_array
 
 import bottleneck as bn
 import numpy as np
+import math
+import random
 
 class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
     """Large Average Submatrices (LAS)
@@ -55,13 +57,17 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
         If True, applies the transformation f(x) = sign(x) * log(1 + |x|) to each entry of the
         input dataset before performing the algorithm (recommended by the original authors for
         datasets that exhibit heavy tails).
+
+    tol : float, default: 1e-4
+        The maximum absolute difference among the scores of two consecutive iterations to declare convergence.
     """
 
-    def __init__(self, num_biclusters=10, score_threshold=1.0, randomized_searches=1000, transform=False):
+    def __init__(self, num_biclusters=10, score_threshold=1.0, randomized_searches=1000, transform=False, tol=1e-4):
         self.num_biclusters = num_biclusters
         self.score_threshold = score_threshold
         self.randomized_searches = randomized_searches
         self.transform = transform
+        self.tol = tol
 
     def run(self, data):
         """Compute biclustering.
@@ -102,13 +108,15 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
     def _find_constrained_bicluster(self, data):
         """Find a k x l bicluster."""
         num_rows, num_cols = data.shape
-        k = np.random.choice(np.arange(1, int(np.ceil(num_rows / 2))))
-        l = np.random.choice(np.arange(1, int(np.ceil(num_cols / 2))))
-        cols = np.random.choice(num_cols, l, replace=False)
 
-        old_avg, avg = -1.0, 0.0
+        k = random.randint(1, math.ceil(num_rows / 2))
+        l = random.randint(1, math.ceil(num_cols / 2))
 
-        while not np.isclose(old_avg, avg):
+        cols = np.random.choice(num_cols, size=l, replace=False)
+
+        old_avg, avg = float('-inf'), 0.0
+
+        while abs(avg - old_avg) > self.tol:
             old_avg = avg
 
             row_sums = np.sum(data[:, cols], axis=1)
@@ -124,7 +132,6 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
     def _improve_bicluster(self, data, b):
         """Relaxes the k x l bicluster constraint in order to maximize the score function locally."""
         num_rows, num_cols = data.shape
-        old_score, score = -1.0, 0.0
 
         row_range = np.arange(1, num_rows + 1)
         col_range = np.arange(1, num_cols + 1)
@@ -132,7 +139,9 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
         row_log_combs = self._log_combs(num_rows)[1:] # self._log_combs(num_rows)[1:] discards the case where the bicluster has 0 rows
         col_log_combs = self._log_combs(num_cols)[1:] # self._log_combs(num_cols)[1:] discards the case where the bicluster has 0 columns
 
-        while not np.isclose(old_score, score):
+        old_score, score = float('-inf'), 0.0
+
+        while abs(score - old_score) > self.tol:
             old_score = score
 
             row_sums = np.sum(data[:, b.cols], axis=1)
@@ -179,3 +188,6 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
 
         if not isinstance(self.transform, bool):
             raise ValueError("transform must be either True or False, got {}".format(self.transform))
+
+        if self.tol <= 0.0:
+            raise ValueError("tol must be a small double > 0.0, got {}".format(self.tol))

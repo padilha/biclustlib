@@ -58,7 +58,7 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
         input dataset before performing the algorithm (recommended by the original authors for
         datasets that exhibit heavy tails).
 
-    tol : float, default: 1e-4
+    tol : float, default: 1e-6
         The maximum absolute difference among the scores of two consecutive iterations to declare convergence.
     """
 

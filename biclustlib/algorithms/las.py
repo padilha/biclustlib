@@ -62,7 +62,7 @@ class LargeAverageSubmatrices(BaseBiclusteringAlgorithm):
         The maximum absolute difference among the scores of two consecutive iterations to declare convergence.
     """
 
-    def __init__(self, num_biclusters=10, score_threshold=1.0, randomized_searches=1000, transform=False, tol=1e-4):
+    def __init__(self, num_biclusters=10, score_threshold=1.0, randomized_searches=1000, transform=False, tol=1e-6):
         self.num_biclusters = num_biclusters
         self.score_threshold = score_threshold
         self.randomized_searches = randomized_searches

@@ -49,14 +49,14 @@ For TeX/LaTeX:
 
 All the original codes are already available with biclustlib and are compiled for the x86_64 architecture.
 
-### Available data collections
+## Available data collections
 
 * *Saccharomyces cerevisiae* microarray dataset from [Tavazoie et al. (1999)](http://www.alterlab.org/teaching/BIOEN3070/papers/Tavazoie_1999.pdf) which was used in [(Cheng and Church, 2000)](https://www.researchgate.net/profile/George_Church/publication/2329589_Biclustering_of_Expression_Data/links/550c04030cf2063799394f5e.pdf);
 * *Saccharomyces cerevisiae* and *Arabidopsis thaliana* microarray datasets used in [(Prelić et al. 2006)](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of);
 * Benchmark of 17 *Saccharomyces cerevisiae* microarray datasets compiled and preprocessed by [Jaskowiak et al. (2013)](http://ieeexplore.ieee.org/abstract/document/6461019/);
 * Benchmark of 35 cancer microarray datasets compiled and preprocessed by [Souto et al. (2008)](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-9-497);
 
-### Available external evaluation measures
+## Available external evaluation measures
 
 * Relative Non-Intersecting Area (RNIA) and Clustering Error (CE) proposed by [Patrikainen and Meila (2006)](http://ieeexplore.ieee.org/abstract/document/1637417/);
 * Recovery and relevance scores proposed by [Prelić et al. (2006)](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of);

@@ -29,7 +29,7 @@ import os
 import shutil
 import numpy as np
 
-class BaseExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
+class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
 
     def __init__(self, exec_comm, tmp_dir, sleep=True):
         super().__init__()
@@ -89,7 +89,7 @@ class BaseExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         pass
 
 
-class BicatWrapper(BaseExecutableWrapper, metaclass=ABCMeta):
+class BicatWrapper(ExecutableWrapper, metaclass=ABCMeta):
 
     def __init__(self, exec_comm, tmp_dir, sleep=True):
         super().__init__('java -jar ' + exec_comm, tmp_dir, sleep)
@@ -116,3 +116,31 @@ class BicatWrapper(BaseExecutableWrapper, metaclass=ABCMeta):
 
     def _convert(self, bit_array):
         return np.array([int(i) for i, n in enumerate(bit_array) if int(n)])
+
+
+class SklearnWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
+
+    def __init__(self, constructor, **kwargs):
+        self.wrapped_algorithm = constructor(**kwargs)
+
+    def run(self, data):
+        """Compute biclustering.
+
+        Parameters
+        ----------
+        data : numpy.ndarray
+        """
+        self.algorithm.fit(data)
+
+        biclusters = []
+
+        for rows, cols in zip(*self.wrapped_algorithm.biclusters_):
+            if rows.dtype == np.bool and cols.dtype == np.bool:
+                rows = np.nonzero(rows)
+                cols = np.nonzero(cols)
+
+            if len(rows) and len(cols):
+                b = Bicluster(rows, cols)
+                biclusters.append(b)
+
+        return Biclustering(biclusters)

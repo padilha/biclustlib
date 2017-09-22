@@ -26,7 +26,7 @@ import numpy as np
 import re
 import os
 
-class BayesianBiclustering(BaseExecutableWrapper):
+class BayesianBiclustering(ExecutableWrapper):
     """Bayesian BiClustering (BBC)
 
     BBC assumes the plaid model and uses a Gibbs sampling procedure for its statistical inference.

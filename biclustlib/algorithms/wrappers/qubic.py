@@ -26,7 +26,7 @@ import numpy as np
 import re
 import os
 
-class QualitativeBiclustering(BaseExecutableWrapper):
+class QualitativeBiclustering(ExecutableWrapper):
     """QUalitative BIClustering (QUBIC)
 
     This class is a simple wrapper for the executable obtained after compiling the C code

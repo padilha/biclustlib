@@ -18,9 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from .sklearn import Spectral
-from .sklearn import Fabia
-
+from .spectral import Spectral
+from .fabia import Fabia
 from .bbc import BayesianBiclustering
 from .qubic import QualitativeBiclustering
 from .opsm import OrderPreservingSubMatrix

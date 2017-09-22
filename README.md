@@ -14,20 +14,20 @@ See requirements.txt.
 
 ### Python implementations
 
-* Bi-Correlation Clustering Algorithm (BCCA);
-* Bit-Pattern Biclustering Algorithm (BiBit);
-* Cheng and Church's Algorithm (CCA);
-* Large Average Submatrices (LAS);
-* Plaid;
-* Conserved Gene Expression Motifs (xMOTIFs);
+* [Bi-Correlation Clustering Algorithm (BCCA)](https://academic.oup.com/bioinformatics/article/25/21/2795/227776/Bi-correlation-clustering-algorithm-for);
+* [Bit-Pattern Biclustering Algorithm (BiBit)](https://academic.oup.com/bioinformatics/article/27/19/2738/231788/A-biclustering-algorithm-for-extracting-bit);
+* [Cheng and Church's Algorithm (CCA)](https://www.researchgate.net/profile/George_Church/publication/2329589_Biclustering_of_Expression_Data/links/550c04030cf2063799394f5e.pdf);
+* [Large Average Submatrices (LAS)](http://www.jstor.org/stable/30242874?seq=1#page_scan_tab_contents);
+* [Plaid](http://www.sciencedirect.com/science/article/pii/S0167947304000295);
+* [Conserved Gene Expression Motifs (xMOTIFs)](https://books.google.com.br/books?hl=pt-BR&lr=&id=5_fRL7rSSX0C&oi=fnd&pg=PA77&dq=extracting+conserved+gene+expression+motifs&ots=I7pzAch3Oq&sig=3BfxcMpfy4lHyD74xBCoSK-PhFo#v=onepage&q&f=false);
 
 ### Wrappers for publicly available software
 
-* BayesianBiClustering (BBC) (wrapper for the executable of the [authors' original implementation](http://www.people.fas.harvard.edu/~junliu/BBC/));
-* Factor Analysis for Bicluster Acquisition (FABIA) (wrapper for the [fabia package](https://github.com/bioinf-jku/pyfabia));
-* Order-Preserving Submatrix (OPSM) (wrapper for the [BicAT](http://people.ee.ethz.ch/~sop/bicat/) software);
-* QUalitative BIClustering (QUBIC) (wrapper for the executable of the [authors' original implementation](http://csbl.bmb.uga.edu/~maqin/bicluster/));
-* Spectral Biclustering (wrapper for the [scikit-learn package](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
+* [BayesianBiClustering (BBC)](https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-9-S1-S4) (wrapper for the executable of the [authors' original implementation](http://www.people.fas.harvard.edu/~junliu/BBC/));
+* [Factor Analysis for Bicluster Acquisition (FABIA)](https://academic.oup.com/bioinformatics/article/26/12/1520/287036/FABIA-factor-analysis-for-bicluster-acquisition) (wrapper for the [fabia package](https://github.com/bioinf-jku/pyfabia));
+* [Order-Preserving Submatrix (OPSM)](http://online.liebertpub.com/doi/abs/10.1089/10665270360688075) (wrapper for the [BicAT](http://people.ee.ethz.ch/~sop/bicat/) software);
+* [QUalitative BIClustering (QUBIC)](https://academic.oup.com/nar/article/37/15/e101/2409951/QUBIC-a-qualitative-biclustering-algorithm-for) (wrapper for the executable of the [authors' original implementation](http://csbl.bmb.uga.edu/~maqin/bicluster/));
+* [Spectral Biclustering](http://genome.cshlp.org/content/13/4/703.short) (wrapper for the [scikit-learn package](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
 
 All the original codes are already available with biclustlib and are compiled for the x86_64 architecture.
 

@@ -10,9 +10,9 @@ TO DO
 
 See requirements.txt.
 
-## Available algorithms
+### Available algorithms
 
-### Python implementations
+#### Python implementations
 
 * [Bi-Correlation Clustering Algorithm (BCCA)](https://academic.oup.com/bioinformatics/article/25/21/2795/227776/Bi-correlation-clustering-algorithm-for);
 * [Bit-Pattern Biclustering Algorithm (BiBit)](https://academic.oup.com/bioinformatics/article/27/19/2738/231788/A-biclustering-algorithm-for-extracting-bit);
@@ -21,7 +21,7 @@ See requirements.txt.
 * [Plaid](http://www.sciencedirect.com/science/article/pii/S0167947304000295);
 * [Conserved Gene Expression Motifs (xMOTIFs)](https://books.google.com.br/books?hl=pt-BR&lr=&id=5_fRL7rSSX0C&oi=fnd&pg=PA77&dq=extracting+conserved+gene+expression+motifs&ots=I7pzAch3Oq&sig=3BfxcMpfy4lHyD74xBCoSK-PhFo#v=onepage&q&f=false);
 
-### Wrappers for publicly available software
+#### Wrappers for publicly available software
 
 * [BayesianBiClustering (BBC)](https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-9-S1-S4) (wrapper for the executable of the [authors' original implementation](http://www.people.fas.harvard.edu/~junliu/BBC/));
 * [Factor Analysis for Bicluster Acquisition (FABIA)](https://academic.oup.com/bioinformatics/article/26/12/1520/287036/FABIA-factor-analysis-for-bicluster-acquisition) (wrapper for the [fabia package](https://github.com/bioinf-jku/pyfabia));
@@ -30,6 +30,13 @@ See requirements.txt.
 * [Spectral Biclustering](http://genome.cshlp.org/content/13/4/703.short) (wrapper for the [scikit-learn package](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
 
 All the original codes are already available with biclustlib and are compiled for the x86_64 architecture.
+
+### Data collections
+
+* *Saccharomyces cerevisiae* microarray dataset from [Tavazoie et al. (1999)](http://www.alterlab.org/teaching/BIOEN3070/papers/Tavazoie_1999.pdf) which was used in [(Cheng and Church, 2000)](https://www.researchgate.net/profile/George_Church/publication/2329589_Biclustering_of_Expression_Data/links/550c04030cf2063799394f5e.pdf);
+* *Saccharomyces cerevisiae* and *Arabidopsis thaliana* microarray datasets used in [(Prelić et al. (2006))](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of);
+* Benchmark of 17 *Saccharomyces cerevisiae* microarray datasets compiled and preprocessed by [Jaskowiak et al. (2013)](http://ieeexplore.ieee.org/abstract/document/6461019/);
+* Benchmark of 35 cancer microarray datasets compiled and preprocessed by [Souto et al. (2008)](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-9-497);
 
 ## Example of use
 

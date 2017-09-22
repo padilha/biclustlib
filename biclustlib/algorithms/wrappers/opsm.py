@@ -4,8 +4,8 @@ from os.path import dirname, join
 class OrderPreservingSubMatrix(BicatWrapper):
     """Order-Preserving SubMatrix (OPSM)
 
-    OPSM finds biclusters, each one containing rows that follow the same order after rearranging
-    the bicluster columns.
+    OPSM finds biclusters, each one containing rows that follow the same order under the
+    bicluster columns.
 
     This class is a simple wrapper for part of the BicAT software (http://people.ee.ethz.ch/~sop/bicat/).
 

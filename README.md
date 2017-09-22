@@ -25,7 +25,7 @@ See requirements.txt.
 
 * BayesianBiClustering (BBC) (wrapper for the executable of the [authors' original implementation](http://www.people.fas.harvard.edu/~junliu/BBC/));
 * Factor Analysis for Bicluster Acquisition (FABIA) (wrapper for the [fabia package](https://github.com/bioinf-jku/pyfabia));
-* Order-Preserving Submatrix (OPSM) (wrapper for part the [BicAT](http://people.ee.ethz.ch/~sop/bicat/) software);
+* Order-Preserving Submatrix (OPSM) (wrapper for the [BicAT](http://people.ee.ethz.ch/~sop/bicat/) software);
 * QUalitative BIClustering (QUBIC) (wrapper for the executable of the [authors' original implementation](http://csbl.bmb.uga.edu/~maqin/bicluster/));
 * Spectral Biclustering (wrapper for the [scikit-learn package](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
 

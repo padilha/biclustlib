@@ -6,9 +6,27 @@ biclustlib is a Python library of biclustering algorithms, evaluation measures a
 
 TO DO
 
-### Dependencies
+## Dependencies
 
 See requirements.txt.
+
+## Citing
+If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was first mentioned and used.
+
+To cite biclustlib use: Padilha, V. A. & Campello, R. J. G. B. (2017). A systematic comparative evaluation of biclustering techniques. *BMC Bioinformatics*, 18(1):55.
+
+For TeX/LaTeX:
+
+    @article{padilha2017,
+      title={A systematic comparative evaluation of biclustering techniques},
+      author={Padilha, Victor A and Campello, Ricardo J G B},
+      journal={BMC Bioinformatics},
+      volume={18},
+      number={1},
+      pages={55},
+      year={2017},
+      publisher={BioMed Central}
+    }
 
 ### Available algorithms
 
@@ -58,24 +76,6 @@ cca = ChengChurchAlgorithm(num_biclusters=100, msr_threshold=300.0, multiple_nod
 biclustering = cca.run(data)
 print(biclustering)
 ```
-
-## Citation
-If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was first mentioned and used.
-
-To cite biclustlib use: Padilha, V. A. & Campello, R. J. G. B. (2017). A systematic comparative evaluation of biclustering techniques. *BMC Bioinformatics*, 18(1):55.
-
-For TeX/LaTeX:
-
-    @article{padilha2017,
-      title={A systematic comparative evaluation of biclustering techniques},
-      author={Padilha, Victor A and Campello, Ricardo J G B},
-      journal={BMC Bioinformatics},
-      volume={18},
-      number={1},
-      pages={55},
-      year={2017},
-      publisher={BioMed Central}
-    }
 
 ## License (GPLv3)
     biclustlib: A Python library of biclustering algorithms and evaluation measures.

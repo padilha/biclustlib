@@ -21,7 +21,7 @@ See requirements.txt.
 * Plaid;
 * Conserved Gene Expression Motifs (xMOTIFs);
 
-### Wrappers of publicly available software
+### Wrappers for publicly available software
 
 * BayesianBiClustering (BBC) (wrapper for the executable of the [authors' original implementation](http://www.people.fas.harvard.edu/~junliu/BBC/));
 * Factor Analysis for Bicluster Acquisition (FABIA) (wrapper for the [fabia package](https://github.com/bioinf-jku/pyfabia));

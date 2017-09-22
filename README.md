@@ -10,6 +10,27 @@ TO DO
 
 See requirements.txt.
 
+## Available algorithms
+
+### Python implementations
+
+* Bi-Correlation Clustering Algorithm (BCCA);
+* Bit-Pattern Biclustering Algorithm (BiBit);
+* Cheng and Church's Algorithm (CCA);
+* Large Average Submatrices (LAS);
+* Plaid;
+* Conserved Gene Expression Motifs (xMOTIFs);
+
+### Wrappers of publicly available software
+
+* BayesianBiClustering (BBC) (wrapper for the executable of the [authors' original implementation](http://www.people.fas.harvard.edu/~junliu/BBC/));
+* Factor Analysis for Bicluster Acquisition (FABIA) (wrapper for the [fabia package](https://github.com/bioinf-jku/pyfabia));
+* Order-Preserving Submatrix (OPSM) (wrapper for part the [BicAT](http://people.ee.ethz.ch/~sop/bicat/) software);
+* QUalitative BIClustering (QUBIC) (wrapper for the executable of the [authors' original implementation](http://csbl.bmb.uga.edu/~maqin/bicluster/));
+* Spectral Biclustering (wrapper for the [scikit-learn package](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
+
+All the original codes are already available with biclustlib and are compiled for the x86_64 architecture.
+
 ## Example of use
 
 ```python

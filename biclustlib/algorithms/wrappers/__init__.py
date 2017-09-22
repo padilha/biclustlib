@@ -20,3 +20,6 @@
 
 from .sklearn import Spectral
 from .sklearn import Fabia
+
+from .bbc import BayesianBiclustering
+from .qubic import QualitativeBiclustering

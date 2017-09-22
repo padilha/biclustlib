@@ -56,6 +56,11 @@ All the original codes are already available with biclustlib and are compiled fo
 * Benchmark of 17 *Saccharomyces cerevisiae* microarray datasets compiled and preprocessed by [Jaskowiak et al. (2013)](http://ieeexplore.ieee.org/abstract/document/6461019/);
 * Benchmark of 35 cancer microarray datasets compiled and preprocessed by [Souto et al. (2008)](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-9-497);
 
+## Available external evaluation measures
+
+* Relative Non-Intersecting Area (RNIA) and Clustering Error (CE) proposed by [Patrikainen and Meila (2006)](http://ieeexplore.ieee.org/abstract/document/1637417/);
+* Recovery and relevance scores proposed by [Prelić et al. (2006)](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of);
+
 ## Example of use
 
 ```python

@@ -23,3 +23,4 @@ from .sklearn import Fabia
 
 from .bbc import BayesianBiclustering
 from .qubic import QualitativeBiclustering
+from .opsm import OrderPreservingSubMatrix

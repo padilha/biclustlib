@@ -1,9 +1,30 @@
+"""
+    biclustlib: A Python library of biclustering algorithms and evaluation measures.
+    Copyright (C) 2017  Victor Alexandre Padilha
+
+    This file is part of biclustlib.
+
+    biclustlib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    biclustlib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
 from ._base import BaseExecutableWrapper
 from ...models import Bicluster, Biclustering
 from os.path import dirname, join
 
 import numpy as np
 import re
+import os
 
 class BayesianBiclustering(BaseExecutableWrapper):
     """Bayesian BiClustering (BBC)
@@ -11,7 +32,7 @@ class BayesianBiclustering(BaseExecutableWrapper):
     BBC assumes the plaid model and uses a Gibbs sampling procedure for its statistical inference.
 
     This class is a simple wrapper for the executable obtained after compiling the C code
-    provided by the original authors of this algorithm (available in: http://www.people.fas.harvard.edu/~junliu/BBC/).
+    provided by the original authors of this algorithm (available in http://www.people.fas.harvard.edu/~junliu/BBC/).
     The binaries contained in this package were compiled for the x86_64 architecture.
 
     Reference
@@ -51,29 +72,27 @@ class BayesianBiclustering(BaseExecutableWrapper):
         self.normalization = normalization
         self.alpha = alpha
 
-        self._data_filename = 'data.txt'
-        self._output_filename = 'output.txt'
-
     def _parse_output(self):
-        with open(self._output_filename, 'r') as f:
-            content = f.read()
-            biclusters_str = re.split('bicluster[0-9]+\n', content)
+        biclusters = []
 
-            bic_str = biclusters_str.pop(0)
-            bic = float(bic_str.rstrip().split('\t')[-1].split()[1])
+        if os.path.exists(self._output_filename):
+            with open(self._output_filename, 'r') as f:
+                content = f.read()
+                biclusters_str = re.split('bicluster[0-9]+\n', content)
 
-            biclusters = []
+                bic_str = biclusters_str.pop(0)
+                bic = float(bic_str.rstrip().split('\t')[-1].split()[1])
 
-            for b_str in biclusters_str:
-                rows_str, cols_str = b_str.split('col\t')
+                for b_str in biclusters_str:
+                    rows_str, cols_str = b_str.split('col\t')
 
-                rows_str = rows_str.split('\n')[2:-1]
-                rows = np.array([int(x.split('\t')[0]) - 1 for x in rows_str])
+                    rows_str = rows_str.split('\n')[2:-1]
+                    rows = np.array([int(x.split('\t')[0]) - 1 for x in rows_str])
 
-                cols_str = cols_str.split('\n')[1:-1]
-                cols = np.array([int(x.split('\t')[0]) - 1 for x in cols_str])
+                    cols_str = cols_str.split('\n')[1:-1]
+                    cols = np.array([int(x.split('\t')[0]) - 1 for x in cols_str])
 
-                biclusters.append(Bicluster(rows, cols))
+                    biclusters.append(Bicluster(rows, cols))
 
         return Biclustering(biclusters)
 

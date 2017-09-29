@@ -30,6 +30,11 @@ import shutil
 import numpy as np
 
 class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
+    """This class defines the skeleton of a naive executable wrapper. In summary,
+    in every execution, it will create a temporary directory, save the input data
+    as a txt file, run the wrapped algorithm and parse the output files. Finally,
+    the temporary directory will be removed.
+    """
 
     def __init__(self, exec_comm, tmp_dir, sleep=True):
         super().__init__()
@@ -90,6 +95,9 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
 
 
 class BicatWrapper(ExecutableWrapper, metaclass=ABCMeta):
+    """This class defines the skeleton of a wrapper for the Biclustering
+    Analysis Toolbox BicAT, available in http://people.ee.ethz.ch/~sop/bicat/.
+    """
 
     def __init__(self, exec_comm, tmp_dir, sleep=True):
         super().__init__('java -jar ' + exec_comm, tmp_dir, sleep)
@@ -119,6 +127,9 @@ class BicatWrapper(ExecutableWrapper, metaclass=ABCMeta):
 
 
 class SklearnWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
+    """This class defines the skeleton of a wrapper for the scikit-learn
+    package.
+    """
 
     def __init__(self, constructor, **kwargs):
         self.wrapped_algorithm = constructor(**kwargs)

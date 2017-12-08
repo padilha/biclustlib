@@ -18,10 +18,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ._base import BicatWrapper
+from ._base import ExecutableWrapper
 from os.path import dirname, join
+from ...models import Bicluster, Biclustering
 
-class OrderPreservingSubMatrix(BicatWrapper):
+import os
+import numpy as np
+
+class OrderPreservingSubMatrix(ExecutableWrapper):
     """Order-Preserving SubMatrix (OPSM)
 
     OPSM finds biclusters, each one containing rows that follow the same order under the
@@ -46,14 +50,42 @@ class OrderPreservingSubMatrix(BicatWrapper):
     def __init__(self, num_best_partial_models=100, tmp_dir='.opsm_tmp'):
         module_dir = dirname(__file__)
 
-        exec_comm = join(module_dir, 'jar', 'opsm.jar') + \
+        exec_comm = 'java -jar ' + \
+                    join(module_dir, 'jar', 'OPSM.jar') + \
                     ' {_data_filename}' + \
+                    ' {_num_rows}' + \
+                    ' {_num_cols}' + \
+                    ' {_output_filename}' + \
                     ' {num_best_partial_models}'
 
         super().__init__(exec_comm, tmp_dir=tmp_dir)
 
         self.num_best_partial_models = num_best_partial_models
-        self._output_filename = 'out.opsm'
+        self._num_rows = None
+        self._num_cols = None
+
+    def _write_data(self, data):
+        self._num_rows, self._num_cols = data.shape
+        super()._write_data(data, header=False, row_names=False)
+
+    def _parse_output(self):
+        biclusters = []
+
+        if os.path.exists(self._output_filename):
+            with open(self._output_filename, 'r') as f:
+                all_lines = f.readlines()
+                chunk = 3
+
+                for i in range(0, len(all_lines), chunk):
+                    rows, cols, _ = all_lines[i:i + chunk]
+                    rows = self._convert(rows)
+                    cols = self._convert(cols)
+                    biclusters.append(Bicluster(rows, cols))
+
+        return Biclustering(biclusters)
+
+    def _convert(self, str_array):
+        return np.array([int(n) for n in str_array.rstrip().split()])
 
     def _validate_parameters(self):
         if self.num_best_partial_models <= 0:

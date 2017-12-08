@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ._base import BaseExecutableWrapper
+from ._base import ExecutableWrapper
 from ...models import Bicluster, Biclustering
 from os.path import dirname, join
 
@@ -78,7 +78,7 @@ class QualitativeBiclustering(ExecutableWrapper):
         self.consistency = consistency
         self.max_overlap_level = max_overlap_level
 
-        self._output_filename = 'data.txt.blocks'
+        self._output_filename = tmp_dir + '/data.txt.blocks'
 
     def _parse_output(self):
         biclusters = []

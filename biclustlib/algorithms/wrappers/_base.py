@@ -42,8 +42,8 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         self.__exec_comm = exec_comm
         self.__sleep = sleep
 
-        self._data_filename = 'data.txt'
-        self._output_filename = 'output.txt'
+        self._data_filename = tmp_dir + '/data.txt'
+        self._output_filename = tmp_dir + '/output.txt'
 
         if not tmp_dir.startswith('.'):
             self.__tmp_dir = '.' + tmp_dir
@@ -58,11 +58,15 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         if self.__sleep:
             sleep(1)
 
-        self.__change_working_dir()
+        # creating temp dir to store executable inputs and outputs
+        os.mkdir(self.__tmp_dir)
+
         self._write_data(data)
         os.system(self.__exec_comm.format(**self.__dict__))
         biclustering = self._parse_output()
-        self.__restore_working_dir()
+
+        # removing temp dir
+        shutil.rmtree(self.__tmp_dir)
 
         return biclustering
 
@@ -92,38 +96,6 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
     @abstractmethod
     def _parse_output(self):
         pass
-
-
-class BicatWrapper(ExecutableWrapper, metaclass=ABCMeta):
-    """This class defines the skeleton of a wrapper for the Biclustering
-    Analysis Toolbox BicAT, available in http://people.ee.ethz.ch/~sop/bicat/.
-    """
-
-    def __init__(self, exec_comm, tmp_dir, sleep=True):
-        super().__init__('java -jar ' + exec_comm, tmp_dir, sleep)
-
-    def _write_data(self, data):
-        super()._write_data(data, header=False, row_names=False)
-
-    def _parse_output(self):
-        biclusters = []
-
-        if os.path.exists(self._output_filename):
-            with open(self._output_filename, 'r') as f:
-                all_lines = f.readlines()
-                rows, cols = None, None
-
-                for i, line in enumerate(all_lines):
-                    if i % 2 == 0:
-                        rows = self._convert(line.split())
-                    else:
-                        cols = self._convert(line.split())
-                        biclusters.append(Bicluster(rows, cols))
-
-        return Biclustering(biclusters)
-
-    def _convert(self, bit_array):
-        return np.array([int(i) for i, n in enumerate(bit_array) if int(n)])
 
 
 class SklearnWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):

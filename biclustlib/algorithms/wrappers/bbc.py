@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ._base import BaseExecutableWrapper
+from ._base import ExecutableWrapper
 from ...models import Bicluster, Biclustering
 from os.path import dirname, join
 

@@ -43,7 +43,7 @@ For TeX/LaTeX:
 
 * [Bayesian BiClustering (BBC)](https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-9-S1-S4) (wrapper for the executable of the [authors' original implementation](http://www.people.fas.harvard.edu/~junliu/BBC/));
 * [Factor Analysis for Bicluster Acquisition (FABIA)](https://academic.oup.com/bioinformatics/article/26/12/1520/287036/FABIA-factor-analysis-for-bicluster-acquisition) (wrapper for the [fabia package](https://github.com/bioinf-jku/pyfabia));
-* [Order-Preserving Submatrix (OPSM)](http://online.liebertpub.com/doi/abs/10.1089/10665270360688075) (wrapper for the [BicAT](http://people.ee.ethz.ch/~sop/bicat/) software);
+* [Order-Preserving Submatrix (OPSM)](http://online.liebertpub.com/doi/abs/10.1089/10665270360688075) (wrapper for the [BicAT](http://people.ee.ethz.ch/~sop/bicat/) software using the executable jar file provided [here](http://bmi.osu.edu/hpc/software/OPSM.tar.gz));
 * [QUalitative BIClustering (QUBIC)](https://academic.oup.com/nar/article/37/15/e101/2409951/QUBIC-a-qualitative-biclustering-algorithm-for) (wrapper for the executable of the [authors' original implementation](http://csbl.bmb.uga.edu/~maqin/bicluster/));
 * [Spectral Biclustering](http://genome.cshlp.org/content/13/4/703.short) (wrapper for the [scikit-learn package](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
 

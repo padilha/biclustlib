@@ -58,8 +58,9 @@ All the original codes are already available with biclustlib and are compiled fo
 
 ## Available external evaluation measures
 
-* Relative Non-Intersecting Area (RNIA) and Clustering Error (CE) proposed by [Patrikainen and Meila (2006)](http://ieeexplore.ieee.org/abstract/document/1637417/);
-* Recovery and relevance scores proposed by [Prelić et al. (2006)](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of);
+* The Relative Non-Intersecting Area (RNIA) and Clustering Error (CE) measures proposed by [Patrikainen and Meila (2006)](http://ieeexplore.ieee.org/abstract/document/1637417/);
+* The recovery and relevance scores proposed by [Prelić et al. (2006)](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of);
+* The match score proposed by [Liu and Wang (2007)](https://academic.oup.com/bioinformatics/article/23/1/50/189870).
 
 ## Example of use
 

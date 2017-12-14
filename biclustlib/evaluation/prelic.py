@@ -96,8 +96,8 @@ def prelic_recovery(predicted_biclustering, reference_biclustering):
     return prelic_relevance(reference_biclustering, predicted_biclustering)
 
 def _match_score(predicted_biclustering, reference_biclustering, bicluster_attr):
-    k = len(predicted_biclustering)
+    k = len(predicted_biclustering.biclusters)
     return sum(max(len(np.intersect1d(getattr(bp, bicluster_attr), getattr(bt, bicluster_attr))) /
-                   len(np.union1d(getattr(bp, bicluster_attr), getattr(bt, bicluster_attr)))
-                       for bt in reference_biclustering.biclusters)
-                       for bp in predicted_biclustering.biclusters) / float(k)
+        len(np.union1d(getattr(bp, bicluster_attr), getattr(bt, bicluster_attr)))
+        for bt in reference_biclustering.biclusters)
+        for bp in predicted_biclustering.biclusters) / k

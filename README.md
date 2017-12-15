@@ -48,7 +48,7 @@ For TeX/LaTeX:
 * [QUalitative BIClustering (QUBIC)](https://academic.oup.com/nar/article/37/15/e101/2409951/QUBIC-a-qualitative-biclustering-algorithm-for) (wrapper for the executable of the [authors' original implementation](http://csbl.bmb.uga.edu/~maqin/bicluster/));
 * [Spectral Biclustering](http://genome.cshlp.org/content/13/4/703.short) (wrapper for the [scikit-learn package](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
 
-All the original codes are already available with biclustlib and are compiled for the x86_64 architecture.
+All the binaries are already available with biclustlib and are compiled for the x86_64 architecture.
 
 ## Available data collections
 

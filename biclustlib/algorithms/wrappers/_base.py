@@ -36,7 +36,7 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
     the temporary directory will be removed.
     """
 
-    def __init__(self, exec_comm, tmp_dir, sleep=True):
+    def __init__(self, exec_comm, tmp_dir, sleep=True, data_type=np.double):
         super().__init__()
 
         self.__exec_comm = exec_comm
@@ -44,21 +44,25 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
 
         self._data_filename = tmp_dir + '/data.txt'
         self._output_filename = tmp_dir + '/output.txt'
+        self.__tmp_dir = tmp_dir
 
-        if not tmp_dir.startswith('.'):
-            self.__tmp_dir = '.' + tmp_dir
-        else:
-            self.__tmp_dir = tmp_dir
+        # some algorithms require the number of rows and columns of the dataset as an input argument
+        self._num_rows = None
+        self._num_cols = None
+        self._data_type = data_type
 
     def run(self, data):
-        data = check_array(data, dtype=np.double, copy=True)
+        data = check_array(data, dtype=self._data_type, copy=True)
 
         self._validate_parameters()
 
         if self.__sleep:
             sleep(1)
 
-        # creating temp dir to store executable inputs and outputs
+        # some executables require the number of rows and columns of the dataset as an input argument
+        self._num_rows, self._num_cols = data.shape
+
+        # creating temp dir to store the executable's inputs and outputs
         os.mkdir(self.__tmp_dir)
 
         self._write_data(data)
@@ -70,28 +74,25 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
 
         return biclustering
 
-    def __change_working_dir(self):
-        os.mkdir(self.__tmp_dir)
-        os.chdir(self.__tmp_dir)
+    def _write_data(self, data):
+        header = self._get_header(data)
 
-    def __restore_working_dir(self):
-        os.chdir('..')
-        shutil.rmtree(self.__tmp_dir)
-
-    def _write_data(self, data, header=True, row_names=True):
-        num_rows, num_cols = data.shape
-
-        if row_names:
-            row_names = np.char.array(['GENE_' + str(i) for i in range(num_rows)])[:, np.newaxis]
-            data = np.hstack((row_names, data))
-
-        if header:
-            header = 'GENES\t' + '\t'.join('COND_' + str(i) for i in range(num_cols))
-        else:
+        if header is None:
             header = ''
+
+        row_names = self._get_row_names(data)
+
+        if row_names is not None:
+            data = np.hstack((row_names[:, np.newaxis], data))
 
         with open(self._data_filename, 'wb') as f:
             np.savetxt(f, data, delimiter='\t', header=header, fmt='%s', comments='')
+
+    def _get_row_names(self, data):
+        return np.char.array(['GENE_' + str(i) for i in range(data.shape[0])])
+
+    def _get_header(self, data):
+        return 'GENES\t' + '\t'.join('COND_' + str(i) for i in range(data.shape[1]))
 
     @abstractmethod
     def _parse_output(self):

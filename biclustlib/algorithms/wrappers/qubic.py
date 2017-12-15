@@ -94,12 +94,13 @@ class QualitativeBiclustering(ExecutableWrapper):
     def _parse_bicluster(self, string):
         after_genes = re.split('Genes \[[0-9]+\]:', string).pop()
         genes, after_conds = re.split('Conds \[[0-9]+\]:', after_genes)
-        genes = genes.split()
-        conds = after_conds.split('\n')[0].split()
-        return Bicluster(self._convert(genes), self._convert(conds))
 
-    def _convert(self, str_array):
-        return np.array([int(a.split('_').pop()) for a in str_array])
+        genes = np.array([g.split('_').pop() for g in genes.split()], dtype=np.int)
+
+        conds = after_conds.split('\n')[0].split()
+        conds = np.array([c.split('_').pop() for c in conds], dtype=np.int)
+
+        return Bicluster(genes, conds)
 
     def _validate_parameters(self):
         if self.num_biclusters <= 0:

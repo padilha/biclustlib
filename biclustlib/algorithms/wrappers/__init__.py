@@ -23,3 +23,4 @@ from .fabia import Fabia
 from .bbc import BayesianBiclustering
 from .qubic import QualitativeBiclustering
 from .opsm import OrderPreservingSubMatrix
+from .bimax import BinaryInclusionMaximalBiclusteringAlgorithm

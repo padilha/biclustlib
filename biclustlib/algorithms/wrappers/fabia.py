@@ -1,7 +1,7 @@
 from ._base import SklearnWrapper
 from fabia import FabiaBiclustering
 
-class Fabia(SklearnWrapper):
+class FactorAnalysisForBiclusterAcquisition(SklearnWrapper):
     """Fabia Biclustering.
 
     Fabia is an algorithm that assumes a multiplicative model and uses a factor analysis approach

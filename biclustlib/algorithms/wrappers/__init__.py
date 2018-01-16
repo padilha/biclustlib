@@ -19,7 +19,7 @@
 """
 
 from .spectral import Spectral
-from .fabia import Fabia
+from .fabia import FactorAnalysisForBiclusterAcquisition
 from .bbc import BayesianBiclustering
 from .qubic import QualitativeBiclustering
 from .opsm import OrderPreservingSubMatrix

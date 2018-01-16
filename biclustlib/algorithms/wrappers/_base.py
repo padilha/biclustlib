@@ -53,12 +53,12 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
     def __init__(self, exec_comm, tmp_dir, sleep=True, data_type=np.double):
         super().__init__()
 
-        self.__exec_comm = exec_comm
-        self.__sleep = sleep
+        self._exec_comm = exec_comm
+        self._sleep = sleep
 
         self._data_filename = tmp_dir + '/data.txt'
         self._output_filename = tmp_dir + '/output.txt'
-        self.__tmp_dir = tmp_dir
+        self._tmp_dir = tmp_dir
 
         # some algorithms require the number of rows and columns of the dataset as an input argument
         self._num_rows = None
@@ -76,23 +76,28 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
 
         self._validate_parameters()
 
-        if self.__sleep:
+        if self._sleep:
             sleep(1)
 
         # some executables require the number of rows and columns of the dataset as an input argument
         self._num_rows, self._num_cols = data.shape
 
         # creating temp dir to store the executable's inputs and outputs
-        os.mkdir(self.__tmp_dir)
+        os.mkdir(self._tmp_dir)
 
         self._write_data(data)
-        os.system(self.__exec_comm.format(**self.__dict__))
+        os.system(self._exec_comm.format(**self.__dict__))
         biclustering = self._parse_output()
 
         # removing temp dir
-        shutil.rmtree(self.__tmp_dir)
+        shutil.rmtree(self._tmp_dir)
 
         return biclustering
+
+    def set_tmp_dir(self, new_tmp_dir):
+        self._data_filename = self._data_filename.replace(self._tmp_dir, new_tmp_dir, 1)
+        self._output_filename = self._output_filename.replace(self._tmp_dir, new_tmp_dir, 1)
+        self._tmp_dir = new_tmp_dir
 
     def _write_data(self, data):
         """Write input data to txt file."""
@@ -140,17 +145,12 @@ class SklearnWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         ----------
         data : numpy.ndarray
         """
-        self.algorithm.fit(data)
+        self.wrapped_algorithm.fit(data)
 
         biclusters = []
 
         for rows, cols in zip(*self.wrapped_algorithm.biclusters_):
-            if rows.dtype == np.bool and cols.dtype == np.bool:
-                rows = np.nonzero(rows)
-                cols = np.nonzero(cols)
-
-            if len(rows) and len(cols):
-                b = Bicluster(rows, cols)
-                biclusters.append(b)
+            b = Bicluster(rows, cols)
+            biclusters.append(b)
 
         return Biclustering(biclusters)

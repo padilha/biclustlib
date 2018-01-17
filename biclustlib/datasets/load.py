@@ -78,7 +78,7 @@ def load_yeast_benchmark():
     benchmark_dir_path = join(module_dir, 'data', 'yeast_benchmark')
 
     return _load_benchmark(benchmark_dir_path,
-                           read_func=lambda f : pd.read_csv(f, delim_whitespace=True, header=0, index_col=[0, 1]),
+                           read_func=lambda f : pd.read_csv(f, delim_whitespace=True, header=0, index_col=1),
                            split_func=lambda f : f.split('.')[0])
 
 def load_cancer_benchmark():

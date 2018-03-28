@@ -141,11 +141,10 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
             rows[rows2remove] = False
 
             if len(cols) >= self.data_min_cols:
+                msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
                 col_indices = np.where(cols)[0]
                 cols2remove = col_indices[np.where(col_msr > self.multiple_node_deletion_threshold * msr)]
                 cols[cols2remove] = False
-            else:
-                cols2remove = np.array([])
 
             msr, row_msr, col_msr = self._calculate_msr(data, rows, cols)
 

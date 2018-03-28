@@ -38,7 +38,7 @@ def load_yeast_tavazoie():
     """
     module_dir = dirname(__file__)
     data = np.loadtxt(join(module_dir, 'data', 'yeast_tavazoie', 'yeast_tavazoie.txt'), dtype=np.double)
-    genes = np.loadtxt(join(module_dir, 'data', 'yeast_tavazoie', 'genes_yeast_tavazoie.txt'), dtype=np.character)
+    genes = np.loadtxt(join(module_dir, 'data', 'yeast_tavazoie', 'genes_yeast_tavazoie.txt'), dtype=np.str)
     return pd.DataFrame(data, index=genes)
 
 def load_prelic():

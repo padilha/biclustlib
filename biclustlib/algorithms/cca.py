@@ -195,11 +195,14 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
 
     def _calculate_msr_col_addition(self, data, rows, cols):
         """Calculate the mean squared residues of the columns for the node addition step."""
-        data_mean = np.mean(data[rows][:, cols])
-        row_means = np.mean(data[:, cols], axis=1)
-        col_means = np.mean(data[rows], axis=0)
+        sub_data = data[rows][:, cols]
+        sub_data_rows = data[rows]
 
-        col_residues = data - row_means[:, np.newaxis] - col_means + data_mean
+        data_mean = np.mean(sub_data)
+        row_means = np.mean(sub_data, axis=1)
+        col_means = np.mean(sub_data_rows, axis=0)
+
+        col_residues = sub_data_rows - row_means[:, np.newaxis] - col_means + data_mean
         col_squared_residues = col_residues * col_residues
         col_msr = np.mean(col_squared_residues, axis=0)
 
@@ -208,15 +211,18 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
     def _calculate_msr_row_addition(self, data, rows, cols):
         """Calculate the mean squared residues of the rows and of the inverse of the rows for
         the node addition step."""
-        data_mean = np.mean(data[rows][:, cols])
-        row_means = np.mean(data[:, cols], axis=1)
-        col_means = np.mean(data[rows], axis=0)
+        sub_data = data[rows][:, cols]
+        sub_data_cols = data[:, cols]
 
-        row_residues = data - row_means[:, np.newaxis] - col_means + data_mean
+        data_mean = np.mean(sub_data)
+        row_means = np.mean(sub_data_cols, axis=1)
+        col_means = np.mean(sub_data, axis=0)
+
+        row_residues = sub_data_cols - row_means[:, np.newaxis] - col_means + data_mean
         row_squared_residues = row_residues * row_residues
         row_msr = np.mean(row_squared_residues, axis=1)
 
-        inverse_residues = -data + row_means[:, np.newaxis] - col_means + data_mean
+        inverse_residues = -sub_data_cols + row_means[:, np.newaxis] - col_means + data_mean
         row_inverse_squared_residues = inverse_residues * inverse_residues
         row_inverse_msr = np.mean(row_inverse_squared_residues, axis=1)
 

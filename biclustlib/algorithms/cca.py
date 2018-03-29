@@ -69,8 +69,6 @@ class ChengChurchAlgorithm(BaseBiclusteringAlgorithm):
         data = check_array(data, dtype=np.double, copy=True)
         self._validate_parameters()
 
-        data = np.copy(data)
-
         num_rows, num_cols = data.shape
         min_value = np.min(data)
         max_value = np.max(data)

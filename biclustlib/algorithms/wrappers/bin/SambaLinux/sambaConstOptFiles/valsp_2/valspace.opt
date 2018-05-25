@@ -1,0 +1,49 @@
+[ProbValSpace]
+RangeBase=-2.8
+ZeroState=2
+BinSize=0.1
+RangeMax=2.8
+
+ExpressDefaultVal=0
+
+UseAutomaticDiscretization=0
+
+Logit=0
+
+FuncScopes = {s 5
+State-2Func
+State-1Func
+State0Func
+State1Func
+State2Func
+}
+
+[State-2Func]
+Points = {f 4
+-1.5	1
+-0.9	0
+}
+
+[State-1Func]
+Points = {f 4
+-1.2	1
+-0.6	0
+}
+
+[State0Func]
+Points = {f 4
+-0.9	0
+0.9	0
+}
+
+[State1Func]
+Points = {f 4
+0.6	0
+1.2	1
+}
+
+[State2Func]
+Points = {f 4
+0.9	0
+1.5	1
+}

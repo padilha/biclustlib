@@ -1,0 +1,34 @@
+How to run SAMBA via shell:
+=============================
+The expander.opt file (attached) is usually written by Expander and depends
+on the selection of parameters by the user.
+
+You can find some info about these configurable parameters under
+http://acgt.cs.tau.ac.il/expander/help/ver5.1Help/Biclustering_GE_Data.htm
+
+
+The file sambaInputFile.exp.ipt contains a sample of the
+expression data that is to be analyzed in the required format.
+The file sambaKeyFile.txt contains the path of this file and some info
+about it. You should put your own files and make the file sambaKeyFile point
+at them
+
+Then, to run samba, type the command:
+
+samba.exe <locationOfConstantOptFiles>/valspace.opt
+<locationOfConstantOptFiles>/graph.opt ibic.opt expander.opt
+
+This is assuming that the curent dir is the one in which samba.exe is
+placed as well as ibic.opt and expander.opt (otherwise you need full path).
+
+  The <locationOfConstantOptFiles> depends on the selection of the options.
+  You can select one out of 6 options (all dirs are under
+sambaConstOptFiles).  You will find a table which describes the advantages
+and disadvantages of each option under
+http://acgt.cs.tau.ac.il/expander/help/ver5.1Help/Biclustering_GE_Data.htm
+
+
+For further support and reporting problems please contact us at expander@cs.tau.ac.il 
+
+
+

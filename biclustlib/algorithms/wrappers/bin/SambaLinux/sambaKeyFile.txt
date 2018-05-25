@@ -1,1 +1,0 @@
-0	txt	file	./{}/sambaInputFile.exp.ipt	take_log	0	key_col	1	first_data_col	2	click_format	1	one_array_type	1

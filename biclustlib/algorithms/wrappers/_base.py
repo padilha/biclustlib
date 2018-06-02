@@ -59,10 +59,6 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         self._data_type = data_type
         self._sleep = sleep
 
-        # some algorithms require the number of rows and columns of the dataset as an input argument
-        self._num_rows = None
-        self._num_cols = None
-
     def run(self, data):
         """Compute biclustering.
 
@@ -73,9 +69,6 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         self._validate_parameters()
         data = check_array(data, dtype=self._data_type, copy=True)
 
-        # some executables require the number of rows and columns of the dataset as an input argument
-        self._num_rows, self._num_cols = data.shape
-
         tmp_dir = tempfile.mkdtemp()
 
         data_path = os.path.join(tmp_dir, self._data_filename)
@@ -83,7 +76,7 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
 
         self._write_data(data_path, data)
         sleep(self._sleep)
-        comm = self._get_command(data_path, output_path).split()
+        comm = self._get_command(data, data_path, output_path).split()
         subprocess.check_call(comm)
         biclustering = self._parse_output(output_path)
 
@@ -91,33 +84,13 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
 
         return biclustering
 
-    def _write_data(self, data_path, data):
-        """Write input data to txt file."""
-        header = self._get_header(data)
-
-        if header is None:
-            header = ''
-
-        row_names = self._get_row_names(data)
-
-        if row_names is not None:
-            data = np.hstack((row_names[:, np.newaxis], data))
-
-        with open(data_path, 'wb') as f:
-            np.savetxt(f, data, delimiter='\t', header=header, fmt='%s', comments='')
-
-    def _get_row_names(self, data):
-        """Some executables require row names in the input txt file. If row names are not
-        required, this method should return None."""
-        return np.char.array(['ROW_' + str(i) for i in range(data.shape[0])])
-
-    def _get_header(self, data):
-        """Some executables require a header in the input txt file. If the header is not
-        required, this method should return None."""
-        return 'DATA\t' + '\t'.join('COL_' + str(i) for i in range(data.shape[1]))
+    @abstractmethod
+    def _get_command(self, data, data_path, output_path):
+        pass
 
     @abstractmethod
-    def _get_command(self, data_path, output_path):
+    def _write_data(self, data_path, data):
+        """Write input data to txt file."""
         pass
 
     @abstractmethod
@@ -150,3 +123,18 @@ class SklearnWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
             biclusters.append(b)
 
         return Biclustering(biclusters)
+
+
+# """Write input data to txt file."""
+# header = self._get_header(data)
+#
+# if header is None:
+#     header = ''
+#
+# row_names = self._get_row_names(data)
+#
+# if row_names is not None:
+#     data = np.hstack((row_names[:, np.newaxis], data))
+#
+# with open(data_path, 'wb') as f:
+#     np.savetxt(f, data, delimiter='\t', header=header, fmt='%s', comments='')

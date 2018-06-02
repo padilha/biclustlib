@@ -58,17 +58,24 @@ class BayesianBiclustering(ExecutableWrapper):
         self.normalization = normalization
         self.alpha = alpha
 
-    def _get_command(self, data_path, output_path):
+    def _get_command(self, data, data_path, output_path):
         module_dir = dirname(__file__)
 
         return join(module_dir, 'bin', 'bbc', 'BBC') + \
-               ' -i {data_path}' + \
-               ' -k {num_biclusters}' + \
-               ' -o {output_path}' + \
-               ' -n {normalization}' + \
-               ' -r {alpha}'.format(data_path=data_path,
-                                    output_path=output_path,
-                                    **self.__dict__)
+               ' -i {}'.format(data_path) + \
+               ' -k {}'.format(self.num_biclusters) + \
+               ' -o {}'.format(output_path) + \
+               ' -n {}'.format(self.normalization) + \
+               ' -r {}'.format(self.alpha)
+
+    def _write_data(self, data_path, data):
+        header = 'DATA\t' + '\t'.join('COL_' + str(i) for i in range(data.shape[1]))
+        row_names = np.char.array(['ROW_' + str(i) for i in range(data.shape[0])])
+        data = data.astype(np.str)
+        data = np.hstack((row_names[:, np.newaxis], data))
+
+        with open(data_path, 'wb') as f:
+            np.savetxt(f, data, delimiter='\t', header=header, fmt='%s', comments='')
 
     def _parse_output(self, output_path):
         biclusters = []

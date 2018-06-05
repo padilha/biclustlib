@@ -29,6 +29,10 @@ from ...models import Bicluster, Biclustering
 import os, shutil, tempfile, subprocess
 import numpy as np
 
+#from rpy2.rinterface import RRuntimeError
+import rpy2.robjects as robjs
+import rpy2.robjects.numpy2ri
+rpy2.robjects.numpy2ri.activate()
 
 class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
     """This class defines the skeleton of a naive executable wrapper. In summary,
@@ -125,16 +129,43 @@ class SklearnWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         return Biclustering(biclusters)
 
 
-# """Write input data to txt file."""
-# header = self._get_header(data)
-#
-# if header is None:
-#     header = ''
-#
-# row_names = self._get_row_names(data)
-#
-# if row_names is not None:
-#     data = np.hstack((row_names[:, np.newaxis], data))
-#
-# with open(data_path, 'wb') as f:
-#     np.savetxt(f, data, delimiter='\t', header=header, fmt='%s', comments='')
+class RBiclustWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
+
+    def __init__(self, data_type=np.double):
+        super().__init__()
+        self._data_type = data_type
+
+    def run(self, data):
+        self._validate_parameters()
+        data = check_array(data, dtype=self._data_type, copy=True)
+
+        robjs.r.library('biclust')
+        biclust = robjs.r['biclust']
+        params = self._get_parameters()
+        biclust_result = biclust(x=data, **params)
+
+        return self._get_biclustering(data, biclust_result)
+
+    def _get_biclustering(self, data, biclust_result):
+        biclusters = []
+        number = int(biclust_result.do_slot('Number')[0])
+
+        if number:
+            rows_bool = np.array(biclust_result.do_slot('RowxNumber'), np.bool).T
+            cols_bool = np.array(biclust_result.do_slot('NumberxCol'), np.bool)
+
+            if cols_bool.shape[0] == data.shape[1]:
+                cols_bool = cols_bool.T
+
+            for rows, cols in zip(rows_bool, cols_bool):
+                rows = np.nonzero(rows)[0]
+                cols = np.nonzero(cols)[0]
+
+                if len(rows) and len(cols):
+                    biclusters.append(Bicluster(rows, cols))
+
+        return Biclustering(biclusters)
+
+    @abstractmethod
+    def _get_parameters(self):
+        pass

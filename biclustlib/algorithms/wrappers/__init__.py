@@ -23,4 +23,7 @@ from .fabia import FactorAnalysisForBiclusterAcquisition
 from .bbc import BayesianBiclustering
 from .qubic import QualitativeBiclustering
 from .opsm import OrderPreservingSubMatrix
-from .bimax import BinaryInclusionMaximalBiclusteringAlgorithm
+#from .bimax import BinaryInclusionMaximalBiclusteringAlgorithm
+from .bimax import RBinaryInclusionMaximalBiclusteringAlgorithm
+from .cca import RChengChurchAlgorithm
+from .plaid import RPlaid

@@ -43,10 +43,10 @@ class Plaid(BaseBiclusteringAlgorithm):
     fit_background_layer : bool, default: True
         If True fits a background layer which represents common effects of all elements of the data matrix.
 
-    row_prunning_threshold : float, default: 0.5
+    row_prunning_threshold : float, default: 0.7
         Threshold for row prunning.
 
-    col_prunning_threshold : float, default: 0.5
+    col_prunning_threshold : float, default: 0.7
         Threshold for column prunning.
 
     significance_tests : int, default: 0
@@ -62,8 +62,8 @@ class Plaid(BaseBiclusteringAlgorithm):
         Number of prunning iterations per layer.
     """
 
-    def __init__(self, num_biclusters=10, fit_background_layer=True, row_prunning_threshold=0.5,
-                 col_prunning_threshold=0.5, significance_tests=0, back_fitting_steps=1,
+    def __init__(self, num_biclusters=10, fit_background_layer=True, row_prunning_threshold=0.7,
+                 col_prunning_threshold=0.7, significance_tests=0, back_fitting_steps=1,
                  initialization_iterations=6, iterations_per_layer=10):
         self.num_biclusters = num_biclusters
         self.fit_background_layer = fit_background_layer

@@ -27,3 +27,4 @@ from .opsm import OrderPreservingSubMatrix
 from .bimax import RBinaryInclusionMaximalBiclusteringAlgorithm
 from .cca import RChengChurchAlgorithm
 from .plaid import RPlaid
+from .isa2 import IterativeSignatureAlgorithm2

@@ -134,16 +134,16 @@ class RBiclustWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
     def __init__(self, data_type=np.double):
         super().__init__()
         self._data_type = data_type
+        self._r_lib = 'biclust'
+        self._r_func = 'biclust'
 
     def run(self, data):
         self._validate_parameters()
         data = check_array(data, dtype=self._data_type, copy=True)
-
-        robjs.r.library('biclust')
-        biclust = robjs.r['biclust']
+        robjs.r.library(self._r_lib)
+        biclust_func = robjs.r[self._r_func]
         params = self._get_parameters()
-        biclust_result = biclust(x=data, **params)
-
+        biclust_result = biclust_func(data, **params)
         return self._get_biclustering(data, biclust_result)
 
     def _get_biclustering(self, data, biclust_result):

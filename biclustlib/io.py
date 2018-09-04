@@ -41,4 +41,4 @@ def _biclustering_to_dict(bic):
     return d
 
 def _dict_to_biclustering(bic_dict):
-    return Biclustering([Bicluster(np.array(rows), np.array(cols)) for rows, cols in bic_dict['biclusters'] if rows and cols])
+    return Biclustering([Bicluster(np.array(rows, np.int), np.array(cols, np.int)) for rows, cols in bic_dict['biclusters']])

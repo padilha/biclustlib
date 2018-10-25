@@ -92,14 +92,14 @@ class ConservedGeneExpressionMotifs(BaseBiclusteringAlgorithm):
         pseucode of the FindMotif() procedure described in the original paper).
         """
         num_rows, num_cols = data.shape
-        best_motif = Bicluster([], [])
-        seeds = np.random.choice(num_cols, self.num_seeds, replace=False)
+        best_motif = Bicluster(np.array([], np.int), np.array([], np.int))
+        seeds = np.random.choice(num_cols, self.num_seeds) #, replace=False)
 
         for s in seeds:
             seed_col = data[row_indices, s][:, np.newaxis]
 
             for i in range(self.num_sets):
-                cols_set = np.random.choice(num_cols, self.set_size, replace=False)
+                cols_set = np.random.choice(num_cols, self.set_size) #, replace=False)
 
                 rows_comp_data = seed_col == data[np.ix_(row_indices, cols_set)]
                 selected_rows = np.array([y for x, y in enumerate(row_indices) if np.all(rows_comp_data[x])], np.int)

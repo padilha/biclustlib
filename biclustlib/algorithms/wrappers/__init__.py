@@ -28,3 +28,4 @@ from .bimax import RBinaryInclusionMaximalBiclusteringAlgorithm
 from .cca import RChengChurchAlgorithm
 from .plaid import RPlaid
 from .isa2 import IterativeSignatureAlgorithm2
+from .xmotifs import RConservedGeneExpressionMotifs

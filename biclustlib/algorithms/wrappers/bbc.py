@@ -44,7 +44,7 @@ class BayesianBiclustering(ExecutableWrapper):
         Number of biclusters to be found.
 
     normalization : str, default: 'iqrn'
-        Normalization method used by the algorithm. Must be one of ('iqrn', 'sqrn', 'csn', 'rsn')
+        Normalization method used by the algorithm. Must be one of ('iqrn', 'sqrn', 'csn', 'rsn', 'none')
         (see http://www.people.fas.harvard.edu/~junliu/BBC/BBC_manual.pdf for details).
 
     alpha : float, default: 90.0
@@ -100,7 +100,7 @@ class BayesianBiclustering(ExecutableWrapper):
         if self.num_biclusters <= 0:
             raise ValueError("num_biclusters must be > 0, got {}".format(self.num_biclusters))
 
-        norm = ('iqrn', 'sqrn', 'csn', 'rsn')
+        norm = ('iqrn', 'sqrn', 'csn', 'rsn', 'none')
 
         if self.normalization not in norm:
             raise ValueError("normalization must be one of {}, got {}".format(norm, self.normalization))

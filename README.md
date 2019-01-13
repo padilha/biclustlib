@@ -4,11 +4,14 @@ biclustlib is a Python library of biclustering algorithms, evaluation measures a
 
 ## Installation
 
-TO DO
+First you need to ensure that all packages have been installed.
++ See `requirements.txt`
 
-## Dependencies
+If you miss something you can simply type:
++ `pip install -r requirements.txt`
 
-See requirements.txt.
+If you have all dependencies installed:
++ `python setup.py install`
 
 ## Citing us
 If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was first mentioned and used.

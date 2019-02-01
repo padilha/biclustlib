@@ -9,7 +9,7 @@ TODO
 ## Dependencies
 
 * See requirements.txt;
-* R >= 3.5;
+* [R](https://www.r-project.org/) >= 3.5;
 * [biclust](https://cran.r-project.org/web/packages/biclust/index.html) R package;
 * [isa2](https://cran.r-project.org/web/packages/isa2/index.html) R package;
 * Other specific libraries may be required by third party implementations that are wrapped in this package;

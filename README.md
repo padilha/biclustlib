@@ -41,12 +41,12 @@ For TeX/LaTeX:
 
 ### Wrappers for publicly available software
 
-## Python packages
+#### Python packages
 
 * [Factor Analysis for Bicluster Acquisition (FABIA)](https://academic.oup.com/bioinformatics/article/26/12/1520/287036/FABIA-factor-analysis-for-bicluster-acquisition) (wrapper for the [pyfabia package](https://github.com/bioinf-jku/pyfabia));
 * [Spectral Biclustering](http://genome.cshlp.org/content/13/4/703.short) (wrapper for the [scikit-learn](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
 
-## R packages
+#### R packages
 
 * [Binary Inclusion-Maximal Biclustering Algorithm (Bimax)](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of) (wrapper for the [biclust](https://cran.r-project.org/web/packages/biclust/index.html) package);
 * [Cheng and Church's Algorithm (CCA)](https://www.researchgate.net/profile/George_Church/publication/2329589_Biclustering_of_Expression_Data/links/550c04030cf2063799394f5e.pdf) (wrapper for the [biclust](https://cran.r-project.org/web/packages/biclust/index.html) package);
@@ -54,7 +54,7 @@ For TeX/LaTeX:
 * [Iterative Signature Algorithm (ISA)](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.67.031902) (wrapper for the [isa2](https://cran.r-project.org/web/packages/isa2/index.html) package);
 * [Conserved Gene Expression Motifs (xMOTIFs)](https://books.google.com.br/books?hl=pt-BR&lr=&id=5_fRL7rSSX0C&oi=fnd&pg=PA77&dq=extracting+conserved+gene+expression+motifs&ots=I7pzAch3Oq&sig=3BfxcMpfy4lHyD74xBCoSK-PhFo#v=onepage&q&f=false) (wrapper for the [biclust](https://cran.r-project.org/web/packages/biclust/index.html) package);
 
-## Other implementations
+#### Other implementations
 * [Bayesian BiClustering (BBC)](https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-9-S1-S4) (wrapper for the executable of the [authors' original implementation](http://www.people.fas.harvard.edu/~junliu/BBC/));
 * [Binary Inclusion-Maximal Biclustering Algorithm (Bimax)](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of) (wrapper for the executable of the [authors' original implementation](http://people.ee.ethz.ch/~sop/bimax/));
 * [Order-Preserving Submatrix (OPSM)](http://online.liebertpub.com/doi/abs/10.1089/10665270360688075) (wrapper for the [BicAT](http://people.ee.ethz.ch/~sop/bicat/) software using the executable jar file available [here](http://bmi.osu.edu/hpc/software/OPSM.tar.gz));

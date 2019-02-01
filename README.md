@@ -2,6 +2,8 @@
 
 biclustlib is a Python library of biclustering algorithms, evaluation measures and datasets distributed under the GPLv3 license.
 
+This library is under constant update. We expect to review its code and release a first version soon.
+
 ## Installation
 
 TODO

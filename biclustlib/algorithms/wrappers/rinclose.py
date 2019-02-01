@@ -25,11 +25,36 @@ from os.path import dirname, join
 import numpy as np
 
 class RInClose(ExecutableWrapper):
-    """RInClose algorithm
-    TODO: add doc
+    """RInClose
+
+    RInClose is an enumerative algorithm for real-valued datasets based on Frequent Concept Analysis (FCA) concepts.
+
+    This class is a simple wrapper for the executable obtained after compiling the C++ code
+    provided by the original authors of this algorithm (available in https://sourceforge.net/projects/rinclose/).
+    The binaries contained in this package were compiled for the x86_64 architecture.
+
+    Reference
+    ---------
+    Veroneze, R., Banerjee, A., & Von Zuben, F. J. (2017). Enumerating all maximal biclusters in
+    numerical datasets. Information Sciences, 379, 288-309.
+
+    Parameters
+    ----------
+    min_rows : int, default: 2
+        Minimum number of rows of a bicluster.
+
+    min_cols : int, default: 2
+        Minimum number of columns of a bicluster.
+
+    noise_tol : float, default: 0.01
+        Maximum noise tolerance of the generated biclusters (epsilon parameter in the original paper).
+
+    algorithm : str, default: 'chv'
+        Enumeration algorithm to be used. Must be one of ('cvcp', 'cvc', 'cvcma', 'chvp', 'chvpm', 'chv', 'opsm').
+        Default is 'chv' which is able to mine noisy coherent-valued biclusters.
     """
 
-    def __init__(self, min_rows=2, min_cols=2, noise_tol=0.01, algorithm='chv'):
+    def __init__(self, min_rows=2, min_cols=2, noise_tol=0.1, algorithm='chv'):
         super().__init__()
         self.min_rows = min_rows
         self.min_cols = min_cols
@@ -70,4 +95,16 @@ class RInClose(ExecutableWrapper):
         return np.array(line_content.split(), dtype=np.int) - 1 # because the output is in MATLAB style
 
     def _validate_parameters(self):
-        pass
+        if self.min_rows <= 0:
+            raise ValueError("num_rows must be > 0, got {}".format(self.num_rows))
+
+        if self.min_cols <= 0:
+            raise ValueError("num_cols must be > 0, got {}".format(self.num_cols))
+
+        if self.noise_tol < 0.0:
+            raise ValueError("noise_tol must be >= 0.0, got {}".format(self.noise_tol))
+
+        algs = ('cvcp', 'cvc', 'cvcma', 'chvp', 'chvpm', 'chv', 'opsm')
+
+        if self.algorithm not in algs:
+            raise ValueError("algorithm must be one of {}, got {}").format(algs, self.algorithm)

@@ -29,7 +29,7 @@ from ...models import Bicluster, Biclustering
 import os, shutil, tempfile, subprocess
 import numpy as np
 
-#from rpy2.rinterface import RRuntimeError
+from rpy2.rinterface import RRuntimeError
 import rpy2.robjects as robjs
 import rpy2.robjects.numpy2ri
 rpy2.robjects.numpy2ri.activate()
@@ -81,8 +81,15 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         self._write_data(data_path, data)
         sleep(self._sleep)
         comm = self._get_command(data, data_path, output_path).split()
-        subprocess.check_call(comm, stderr=subprocess.STDOUT)
-        biclustering = self._parse_output(output_path)
+
+        try:
+            subprocess.check_call(comm, stderr=subprocess.STDOUT)
+            biclustering = self._parse_output(output_path)
+
+        except subprocess.CalledProcessError as error:
+            print('The following error occurred while running the command {}:\n{}'.format(comm, error.output))
+            print('Returning empty biclustering solution.')
+            biclustering = Biclustering([])
 
         shutil.rmtree(tmp_dir)
 
@@ -139,12 +146,21 @@ class RBiclustWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
 
     def run(self, data):
         self._validate_parameters()
-        data = check_array(data, dtype=self._data_type, copy=True)
-        robjs.r.library(self._r_lib)
-        biclust_func = robjs.r[self._r_func]
         params = self._get_parameters()
-        biclust_result = biclust_func(data, **params)
-        return self._get_biclustering(data, biclust_result)
+        data = check_array(data, dtype=self._data_type, copy=True)
+
+        try:
+            robjs.r.library(self._r_lib)
+            biclust_func = robjs.r[self._r_func]
+            biclust_result = biclust_func(data, **params)
+            biclustering = self._get_biclustering(data, biclust_result)
+
+        except RRuntimeError as error:
+            print('The following error occurred while running R:\n' + str(error))
+            print('Returning empty biclustering solution.')
+            biclustering = Biclustering([])
+
+        return biclustering
 
     def _get_biclustering(self, data, biclust_result):
         biclusters = []

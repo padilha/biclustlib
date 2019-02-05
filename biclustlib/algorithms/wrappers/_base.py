@@ -81,7 +81,7 @@ class ExecutableWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         self._write_data(data_path, data)
         sleep(self._sleep)
         comm = self._get_command(data, data_path, output_path).split()
-        subprocess.check_call(comm)
+        subprocess.check_call(comm, stderr=subprocess.STDOUT)
         biclustering = self._parse_output(output_path)
 
         shutil.rmtree(tmp_dir)

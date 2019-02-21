@@ -48,6 +48,11 @@ class Bicluster:
         cols_intersec = np.intersect1d(self.cols, other.cols)
         return Bicluster(rows_intersec, cols_intersec)
 
+    def union(self, other):
+        rows_union = np.union1d(self.rows, other.rows)
+        cols_union = np.union1d(self.cols, other.cols)
+        return Bicluster(rows_union, cols_union)
+
     @property
     def area(self):
         """Calculates the number of matrix elements of the bicluster."""

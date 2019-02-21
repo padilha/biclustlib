@@ -18,15 +18,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ._base import ExecutableWrapper
-from ._util import parse_in_chunks
-from ...models import Bicluster, Biclustering
-from os.path import dirname, join
+from ._base import RBiclustWrapper
 
-import os
 import numpy as np
 
-class BinaryInclusionMaximalBiclusteringAlgorithm(ExecutableWrapper):
+class RBinaryInclusionMaximalBiclusteringAlgorithm(RBiclustWrapper):
     """Binary Inclusion-Maximal Biclustering Algorithm (Bimax)
 
     Bimax searches for submatrices with all values equal to 1 in a binary matrix.
@@ -55,25 +51,11 @@ class BinaryInclusionMaximalBiclusteringAlgorithm(ExecutableWrapper):
         self.min_cols = min_cols
         self.num_biclusters = num_biclusters
 
-    def _get_command(self, data, data_path, output_path):
-        module_dir = dirname(__file__)
-        return join(module_dir, 'bin', 'bimax', 'bimax') + ' {} > {}'.format(data_path, output_path)
-
-    def _write_data(self, data_path, data):
-        with open(data_path, 'wb') as f:
-            n, m = data.shape
-            header = '{} {} {} {} {}'.format(n, m, self.min_rows, self.min_cols, self.num_biclusters)
-            np.savetxt(f, data, delimiter=' ', header=header, fmt='%d', comments='')
-
-    def _parse_output(self, output_path):
-        biclusters = []
-
-        if os.path.exists(output_path):
-            for rows, cols in parse_in_chunks(output_path, chunksize=4, rows_idx=2, cols_idx=3):
-                b = Bicluster(rows - 1, cols - 1)
-                biclusters.append(b)
-
-        return Biclustering(biclusters)
+    def _get_parameters(self):
+        return {'method' : 'BCBimax',
+                'minr' : self.min_rows,
+                'minc' : self.min_cols,
+                'number' : self.num_biclusters}
 
     def _validate_parameters(self):
         if self.min_rows <= 0:

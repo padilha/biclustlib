@@ -23,9 +23,10 @@ from .fabia import FactorAnalysisForBiclusterAcquisition
 from .bbc import BayesianBiclustering
 from .qubic import QualitativeBiclustering
 from .opsm import OrderPreservingSubMatrix
-#from .bimax import BinaryInclusionMaximalBiclusteringAlgorithm
-from .bimax import RBinaryInclusionMaximalBiclusteringAlgorithm
-from .cca import RChengChurchAlgorithm
-from .plaid import RPlaid
+from .bimax import BinaryInclusionMaximalBiclusteringAlgorithm
+from .rbimax import RBinaryInclusionMaximalBiclusteringAlgorithm
+from .rcca import RChengChurchAlgorithm
+from .rplaid import RPlaid
 from .isa2 import IterativeSignatureAlgorithm2
 from .xmotifs import RConservedGeneExpressionMotifs
+from .rinclose import RInClose

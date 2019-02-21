@@ -2,6 +2,8 @@
 
 biclustlib is a Python library of biclustering algorithms, evaluation measures and datasets distributed under the GPLv3 license.
 
+This library is under constant update. We expect to review its code and release a first version soon.
+
 ## Installation
 
 First you need to ensure that all packages have been installed.
@@ -12,6 +14,12 @@ If you miss something you can simply type:
 
 If you have all dependencies installed:
 + `python setup.py install`
+=======
+* See requirements.txt;
+* [R](https://www.r-project.org/) >= 3.5;
+* [biclust](https://cran.r-project.org/web/packages/biclust/index.html) R package;
+* [isa2](https://cran.r-project.org/web/packages/isa2/index.html) R package;
+* Other specific libraries may be required by third party implementations that are wrapped in this package;
 
 ## Citing us
 If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was first mentioned and used.
@@ -44,14 +52,27 @@ For TeX/LaTeX:
 
 ### Wrappers for publicly available software
 
+#### Python packages
+
+* [Factor Analysis for Bicluster Acquisition (FABIA)](https://academic.oup.com/bioinformatics/article/26/12/1520/287036/FABIA-factor-analysis-for-bicluster-acquisition) (wrapper for the [pyfabia package](https://github.com/bioinf-jku/pyfabia));
+* [Spectral Biclustering](http://genome.cshlp.org/content/13/4/703.short) (wrapper for the [scikit-learn](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
+
+#### R packages
+
+* [Binary Inclusion-Maximal Biclustering Algorithm (Bimax)](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of) (wrapper for the [biclust](https://cran.r-project.org/web/packages/biclust/index.html) package);
+* [Cheng and Church's Algorithm (CCA)](https://www.researchgate.net/profile/George_Church/publication/2329589_Biclustering_of_Expression_Data/links/550c04030cf2063799394f5e.pdf) (wrapper for the [biclust](https://cran.r-project.org/web/packages/biclust/index.html) package);
+* [Plaid](http://www.sciencedirect.com/science/article/pii/S0167947304000295) (wrapper for the [biclust](https://cran.r-project.org/web/packages/biclust/index.html) package);
+* [Iterative Signature Algorithm (ISA)](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.67.031902) (wrapper for the [isa2](https://cran.r-project.org/web/packages/isa2/index.html) package);
+* [Conserved Gene Expression Motifs (xMOTIFs)](https://books.google.com.br/books?hl=pt-BR&lr=&id=5_fRL7rSSX0C&oi=fnd&pg=PA77&dq=extracting+conserved+gene+expression+motifs&ots=I7pzAch3Oq&sig=3BfxcMpfy4lHyD74xBCoSK-PhFo#v=onepage&q&f=false) (wrapper for the [biclust](https://cran.r-project.org/web/packages/biclust/index.html) package);
+
+#### Other implementations
 * [Bayesian BiClustering (BBC)](https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-9-S1-S4) (wrapper for the executable of the [authors' original implementation](http://www.people.fas.harvard.edu/~junliu/BBC/));
 * [Binary Inclusion-Maximal Biclustering Algorithm (Bimax)](https://academic.oup.com/bioinformatics/article/22/9/1122/200492/A-systematic-comparison-and-evaluation-of) (wrapper for the executable of the [authors' original implementation](http://people.ee.ethz.ch/~sop/bimax/));
-* [Factor Analysis for Bicluster Acquisition (FABIA)](https://academic.oup.com/bioinformatics/article/26/12/1520/287036/FABIA-factor-analysis-for-bicluster-acquisition) (wrapper for the [fabia package](https://github.com/bioinf-jku/pyfabia));
 * [Order-Preserving Submatrix (OPSM)](http://online.liebertpub.com/doi/abs/10.1089/10665270360688075) (wrapper for the [BicAT](http://people.ee.ethz.ch/~sop/bicat/) software using the executable jar file available [here](http://bmi.osu.edu/hpc/software/OPSM.tar.gz));
 * [QUalitative BIClustering (QUBIC)](https://academic.oup.com/nar/article/37/15/e101/2409951/QUBIC-a-qualitative-biclustering-algorithm-for) (wrapper for the executable of the [authors' original implementation](http://csbl.bmb.uga.edu/~maqin/bicluster/));
-* [Spectral Biclustering](http://genome.cshlp.org/content/13/4/703.short) (wrapper for the [scikit-learn package](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.bicluster.SpectralBiclustering.html) implementation);
+* [RInClose](https://www.sciencedirect.com/science/article/pii/S0020025516313536) (wrapper for the executable of the [authors' original implementation](https://sourceforge.net/projects/rinclose/));
 
-All the binaries are already available with biclustlib and are compiled for the x86_64 architecture.
+All the binaries are available with biclustlib and are compiled for the x86_64 architecture.
 
 ## Available data collections
 

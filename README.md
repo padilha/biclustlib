@@ -8,18 +8,16 @@ This library is under constant update. We expect to review its code and release 
 
 First you need to ensure that all packages have been installed.
 + See `requirements.txt`
++ [R](https://www.r-project.org/) >= 3.5;
++ [biclust](https://cran.r-project.org/web/packages/biclust/index.html) R package;
++ [isa2](https://cran.r-project.org/web/packages/isa2/index.html) R package;
++ Other specific libraries may be required by third party implementations that are wrapped in this package;
 
 If you miss something you can simply type:
 + `pip install -r requirements.txt`
 
 If you have all dependencies installed:
 + `python setup.py install`
-
-* See requirements.txt;
-* [R](https://www.r-project.org/) >= 3.5;
-* [biclust](https://cran.r-project.org/web/packages/biclust/index.html) R package;
-* [isa2](https://cran.r-project.org/web/packages/isa2/index.html) R package;
-* Other specific libraries may be required by third party implementations that are wrapped in this package;
 
 ## Citing us
 If you use biclustlib in a scientific publication, we would appreciate citations of our paper where this library was first mentioned and used.

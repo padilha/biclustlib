@@ -14,7 +14,7 @@ If you miss something you can simply type:
 
 If you have all dependencies installed:
 + `python setup.py install`
-=======
+
 * See requirements.txt;
 * [R](https://www.r-project.org/) >= 3.5;
 * [biclust](https://cran.r-project.org/web/packages/biclust/index.html) R package;

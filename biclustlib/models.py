@@ -53,6 +53,10 @@ class Bicluster:
         cols_union = np.union1d(self.cols, other.cols)
         return Bicluster(rows_union, cols_union)
 
+    def overlap(self, other):
+        min_area = min(self.area, other.area)
+        return self.intersection(other).area / min_area
+
     @property
     def area(self):
         """Calculates the number of matrix elements of the bicluster."""

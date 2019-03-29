@@ -30,9 +30,12 @@ class Bicluster:
 
     cols : numpy.array
         Columns of the bicluster (assumes that column indexing starts at 0).
+
+    data : numpy.ndarray
+        bla
     """
 
-    def __init__(self, rows, cols):
+    def __init__(self, rows, cols, info=None):
         if rows.dtype == np.bool and cols.dtype == np.bool:
             self.rows = np.nonzero(rows)[0]
             self.cols = np.nonzero(cols)[0]
@@ -41,6 +44,9 @@ class Bicluster:
             self.cols = cols
         else:
             raise ValueError("rows and cols must be bool or int numpy.arrays")
+
+        if info is not None:
+            self.info = info
 
     def intersection(self, other):
         """Returns a bicluster that represents the area of overlap between two biclusters."""

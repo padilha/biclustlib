@@ -86,15 +86,26 @@ class BayesianBiclustering(ExecutableWrapper):
                 biclusters_str = re.split('bicluster[0-9]+\n', content)[1:]
 
                 for b_str in biclusters_str:
-                    row_matches = re.findall('ROW_[0-9]+', b_str)
-                    rows = np.array([r.split('_')[1] for r in row_matches], dtype=np.int)
-
-                    col_matches = re.findall('COL_[0-9]+', b_str)
-                    cols = np.array([c.split('_')[1] for c in col_matches], dtype=np.int)
-
-                    biclusters.append(Bicluster(rows, cols))
+                    ground_effect = float(b_str.split('\n', 1)[0].split()[-1])
+                    rows, rows_effects = self._get_indices_and_effects(b_str, 'ROW_[0-9]+')
+                    cols, cols_effects = self._get_indices_and_effects(b_str, 'COL_[0-9]+')
+                    info = {'mu' : ground_effect, 'alpha' : rows_effects, 'beta' : cols_effects}
+                    biclusters.append(Bicluster(rows, cols, b_data, info))
 
         return Biclustering(biclusters)
+
+    def _get_indices_and_effects(self, bicluster_string, pattern):
+        matches = re.findall(pattern + '\t+\d+\.?\d+', bicluster_string)
+
+        indices = []
+        effects = []
+
+        for m in matches:
+            i, e = m.split('_')[1].split()
+            indices.append(i)
+            effects.append(e)
+
+        return np.array(indices, np.int), np.array(effects, np.double)
 
     def _validate_parameters(self):
         if self.num_biclusters <= 0:

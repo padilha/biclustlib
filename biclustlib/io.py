@@ -37,8 +37,17 @@ def load_biclusterings(file_path):
 
 def _biclustering_to_dict(bic):
     d = {'__class__' : bic.__class__.__name__, '__module__' : bic.__module__}
-    d['biclusters'] =  [(list(map(int, b.rows)), list(map(int, b.cols))) for b in bic.biclusters]
+
+    try:
+        d['biclusters'] =  [(list(map(int, b.rows)), list(map(int, b.cols)), b.info) for b in bic.biclusters]
+    except ValueError: # for old compatibility
+        d['biclusters'] =  [(list(map(int, b.rows)), list(map(int, b.cols))) for b in bic.biclusters]
+
     return d
 
 def _dict_to_biclustering(bic_dict):
-    return Biclustering([Bicluster(np.array(rows, np.int), np.array(cols, np.int)) for rows, cols in bic_dict['biclusters']])
+    try:
+        biclust =  Biclustering([Bicluster(np.array(rows, np.int), np.array(cols, np.int), info) for rows, cols, info in bic_dict['biclusters']])
+    except ValueError:
+        biclust =  Biclustering([Bicluster(np.array(rows, np.int), np.array(cols, np.int)) for rows, cols in bic_dict['biclusters']])
+    return biclust

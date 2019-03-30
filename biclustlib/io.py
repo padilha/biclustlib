@@ -39,7 +39,7 @@ def _biclustering_to_dict(bic):
     d = {'__class__' : bic.__class__.__name__, '__module__' : bic.__module__}
 
     try:
-        d['biclusters'] =  [(list(map(int, b.rows)), list(map(int, b.cols)), b.info) for b in bic.biclusters]
+        d['biclusters'] =  [(list(map(int, b.rows)), list(map(int, b.cols)), b.data.tolist()) for b in bic.biclusters]
     except ValueError: # for old compatibility
         d['biclusters'] =  [(list(map(int, b.rows)), list(map(int, b.cols))) for b in bic.biclusters]
 
@@ -47,7 +47,7 @@ def _biclustering_to_dict(bic):
 
 def _dict_to_biclustering(bic_dict):
     try:
-        biclust =  Biclustering([Bicluster(np.array(rows, np.int), np.array(cols, np.int), info) for rows, cols, info in bic_dict['biclusters']])
+        biclust =  Biclustering([Bicluster(np.array(rows, np.int), np.array(cols, np.int), np.array(data, np.double)) for rows, cols, info in bic_dict['biclusters']])
     except ValueError:
         biclust =  Biclustering([Bicluster(np.array(rows, np.int), np.array(cols, np.int)) for rows, cols in bic_dict['biclusters']])
     return biclust

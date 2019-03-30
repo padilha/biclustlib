@@ -89,8 +89,8 @@ class BayesianBiclustering(ExecutableWrapper):
                     ground_effect = float(b_str.split('\n', 1)[0].split()[-1])
                     rows, rows_effects = self._get_indices_and_effects(b_str, 'ROW_[0-9]+')
                     cols, cols_effects = self._get_indices_and_effects(b_str, 'COL_[0-9]+')
-                    info = {'mu' : ground_effect, 'alpha' : rows_effects, 'beta' : cols_effects}
-                    biclusters.append(Bicluster(rows, cols, b_data, info))
+                    b_data = ground_effect + rows_effects[:, np.newaxis] + cols_effects
+                    biclusters.append(Bicluster(rows, cols, b_data))
 
         return Biclustering(biclusters)
 

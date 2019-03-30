@@ -36,10 +36,10 @@ class Bicluster:
     """
 
     def __init__(self, rows, cols, data=None):
-        if rows.dtype == np.bool and cols.dtype == np.bool:
+        if isinstance(rows, np.ndarray) and rows.dtype == np.bool and cols.dtype == np.bool:
             self.rows = np.nonzero(rows)[0]
             self.cols = np.nonzero(cols)[0]
-        elif rows.dtype == np.int and cols.dtype == np.int:
+        elif isinstance(cols, np.ndarray) and rows.dtype == np.int and cols.dtype == np.int:
             self.rows = rows
             self.cols = cols
         else:
@@ -48,7 +48,7 @@ class Bicluster:
         if data is not None:
             n, m = len(self.rows), len(self.cols)
 
-            if isinstance(data, np.array) and data.shape == (n, m):
+            if isinstance(data, np.ndarray) and data.shape == (n, m):
                 self.data = data
             else:
                 raise ValueError("")

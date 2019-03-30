@@ -48,7 +48,7 @@ class Bicluster:
         if data is not None:
             n, m = len(self.rows), len(self.cols)
 
-            if isinstance(data, np.ndarray) and data.shape == (n, m):
+            if isinstance(data, np.ndarray) and (data.shape == (n, m) or (len(data) == 0 and n == 0)):
                 self.data = data
             else:
                 raise ValueError("")

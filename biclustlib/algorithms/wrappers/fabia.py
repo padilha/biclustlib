@@ -1,5 +1,8 @@
 from ._base import SklearnWrapper
 from fabia import FabiaBiclustering
+from ...models import Bicluster
+
+import numpy as np
 
 class FactorAnalysisForBiclusterAcquisition(SklearnWrapper):
     """Fabia Biclustering.
@@ -25,6 +28,16 @@ class FactorAnalysisForBiclusterAcquisition(SklearnWrapper):
 
     def __init__(self, **kwargs):
         super().__init__(FabiaBiclustering, **kwargs)
+        self.__data_estimation = None
+
+    def run(self, data):
+        self.__data_estimation = None
+        return super().run(data)
+
+    def _get_bicluster(self, rows, cols):
+        if self.__data_estimation is None:
+            self.__data_estimation = np.dot(self.wrapped_algorithm.Z_, self.wrapped_algorithm.L_)
+        return Bicluster(rows, cols, self.__data_estimation[np.ix_(rows, cols)])
 
     def _validate_parameters(self):
         """This Fabia wrapper does not require any data parameters validation step.

@@ -130,10 +130,13 @@ class SklearnWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):
         biclusters = []
 
         for rows, cols in zip(*self.wrapped_algorithm.biclusters_):
-            b = Bicluster(rows, cols)
+            b = self._get_bicluster(rows, cols)
             biclusters.append(b)
 
         return Biclustering(biclusters)
+
+    def _get_bicluster(self, rows, cols):
+        return Bicluster(rows, cols)
 
 
 class RBiclustWrapper(BaseBiclusteringAlgorithm, metaclass=ABCMeta):

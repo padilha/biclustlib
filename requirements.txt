@@ -1,6 +1,6 @@
 numpy>=1.16.1
 scipy>=1.2.0
-sklearn>=0.19.0
+scikit-learn>=0.19.0
 pandas>=0.24.0
 bottleneck
 munkres

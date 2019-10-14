@@ -29,7 +29,7 @@ from ...models import Bicluster, Biclustering
 import os, shutil, tempfile, subprocess
 import numpy as np
 
-from rpy2.rinterface import RRuntimeError
+from rpy2.rinterface_lib.embedded import RRuntimeError
 import rpy2.robjects as robjs
 import rpy2.robjects.numpy2ri
 rpy2.robjects.numpy2ri.activate()
